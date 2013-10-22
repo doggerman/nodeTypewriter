@@ -188,7 +188,6 @@ function get_location(host, path, this_calback){
 
 		//the whole response has been recieved, so we just print it out here
 		response.on('end', function () {
-			console.log(str);
 			this_calback(str);
 		});
 	}

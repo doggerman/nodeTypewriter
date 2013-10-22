@@ -22,9 +22,6 @@ $(document).ready(function(){
 		$('#letters').html('');
 		for(i in data){
 			var key = data[i].ip_address.substring(0,6);
-			console.log(data[i]);
-			console.log(data[i].ip_address);
-			console.log(key);
 			apppendCssClass(key);
 			$('#letters').append('<div class="letter user_' + key + '">' + data[i].letter + '</div>')
 		}
@@ -52,8 +49,6 @@ $(document).ready(function(){
 		color: green;
 		*/
 		var rgb = hexToRgb(key);
-		console.log(key);
-		console.log(rgb);
 		style.innerHTML = '.user_' + key + ' { \
 			color: #'+key+';\
 			background: rgba( ' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', 0.2);\
