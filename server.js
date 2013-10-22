@@ -7,9 +7,9 @@ var io = require('socket.io').listen(server);
 
 // Create the connection. 
 // Data is default to new mysql installation and should be changed according to your configuration. 
-var connection = mysql.createConnection({ user: "root", password: "ursulita", database: "thejsj_node_test" }); 
+var connection = mysql.createConnection({ user: "thejsj_node_test", password: "ursulita", database: "thejsj_node_test" }); 
 
-server.listen(8080);
+server.listen(80);
 
 app.use(express.bodyParser());
 

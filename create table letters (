@@ -1,0 +1,11 @@
+create table letters ( 
+	letter_id INT(11) NOT NULL auto_increment, 
+	letter VARCHAR(2), 
+	ip_address VARCHAR(255), 
+	created TIMESTAMP, 
+	location VARCHAR(255), 
+	PRIMARY KEY (letter_id) );
+
+GRANT ALL privileges 
+ON thejsj_node_test.* 
+	TO thejsj_node_test@'%';
