@@ -49,6 +49,8 @@ $(document).ready(function(){
 		color: green;
 		*/
 		var rgb = hexToRgb(key);
+		console.log(key);
+		console.log(rgb);
 		style.innerHTML = '.user_' + key + ' { \
 			color: #'+key+';\
 			background: rgba( ' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', 0.2);\
