@@ -4,6 +4,7 @@ var mysql = require("mysql");
 var app = require('express')();
 var server = require('http').createServer(app)
 var io = require('socket.io').listen(server);
+var crypto = require('crypto');
 
 // Create the connection. 
 // Data is default to new mysql installation and should be changed according to your configuration. 
@@ -76,11 +77,12 @@ function insertLetter(letter, callback){
 	getNetworkIPs(function (error, ip) {
 		var location = get_location('api.hostip.info', '/get_json.php?ip=' + ip[0], function(resposne){
 			var data = JSON.parse(resposne);
+			var encrypted_ip = crypto.createHash('md5').update(ip[0]).digest("hex")
 			// Build Dict
 			var letter_query  = {
 				letter: letter.letter, 
 				location: data.city + ", " + data.country_code, 
-				ip_address : ip[0]
+				ip_address : encrypted_ip,
 			};
 			var query = connection.query('INSERT INTO letters SET ?', letter_query, function(err, result) {
 				if (err) throw err;
