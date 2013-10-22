@@ -22,6 +22,9 @@ $(document).ready(function(){
 		$('#letters').html('');
 		for(i in data){
 			var key = data[i].ip_address.substring(0,6);
+			console.log(data[i]);
+			console.log(data[i].ip_address);
+			console.log(key);
 			apppendCssClass(key);
 			$('#letters').append('<div class="letter user_' + key + '">' + data[i].letter + '</div>')
 		}
