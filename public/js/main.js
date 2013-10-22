@@ -19,11 +19,9 @@ $(document).ready(function(){
 	})
 
 	socket.on('getAllLetters',function (data) {
-		console.log(data);
-		console.log(data.length);
 		$('#letters').html('');
 		for(i in data){
-			$('#letters').append('<div class="letter">' + data[i].letter + '</div>')
+			$('#letters').append('<div class="letter ' + data[i].ip_address + '">' + data[i].letter + '</div>')
 		}
 	});
 
