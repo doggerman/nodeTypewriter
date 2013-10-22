@@ -27,8 +27,18 @@ app.configure(function(){
 // Get Letters
 app.get('/api/letters/', function(req, res){
 	getAllLetters(function(data){
-		console.log(data);
 		// Parse into a json
+	});
+});
+
+// Get Letters
+app.get('/api/delete_all/', function(req, res){
+	deleteAllLetters(function(data){
+		// Parse into a json
+		query_response = {
+			status : 'succses',
+		}
+		callback(JSON.stringify(query_response));
 	});
 });
 
@@ -69,24 +79,18 @@ function insertLetter(letter, callback){
 	getNetworkIPs(function (error, ip) {
 		var location = get_location('api.hostip.info', '/get_json.php?ip=' + ip[0], function(resposne){
 			var data = JSON.parse(resposne);
-			console.log(letter.letter);
 			// Build Dict
 			var letter_query  = {
 				letter: letter.letter, 
 				location: data.city + ", " + data.country_code, 
 				ip_address : ip[0]
 			};
-			console.log('letter_query:');
-			console.log(letter_query);
 			var query = connection.query('INSERT INTO letters SET ?', letter_query, function(err, result) {
 				if (err) throw err;
-				console.log('New Row Inserted : ' + result.insertId);
 				query_response = {
 					status : 'succses',
 					letter_id : result.insertId,
 				}
-				console.log("qUERY RESPONSE: ");
-				console.log(JSON.stringify(query_response));
 				callback(JSON.stringify(query_response));
 			});
 		});
@@ -103,6 +107,12 @@ function getAllLetters(callback){
 			new_dict[rows[i].letter_id] = rows[i];
 		}
 		callback(new_dict); 
+	});
+}
+
+function deleteAllLetters(callback){
+	connection.query('TRUNCATE TABLE letters;', function (error, rows, fields) { 
+		callback(); 
 	});
 }
 
@@ -164,8 +174,6 @@ var getNetworkIPs = (function () {
 
 function get_location(host, path, this_calback){
 	//The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
-	console.log('HOST : ' + host);
-	console.log('PATH : ' + path);
 	var options = {
 		host: host,
 		path: path,
