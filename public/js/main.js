@@ -12,7 +12,7 @@ Styling...
 
 $(document).ready(function(){
 
-	var socket = io.connect('http://162.243.58.104/');
+	var socket = io.connect('http://162.243.58.104:8080');
 
 	socket.emit('requestAllLetters', function(data){
 		console.log("Done with gett al letters");

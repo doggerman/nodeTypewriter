@@ -35,10 +35,7 @@ app.get('/api/letters/', function(req, res){
 app.get('/api/delete_all/', function(req, res){
 	deleteAllLetters(function(data){
 		// Parse into a json
-		query_response = {
-			status : 'succses',
-		}
-		callback(JSON.stringify(query_response));
+		res.send("All Letters Deleted");
 	});
 });
 
