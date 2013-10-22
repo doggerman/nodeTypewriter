@@ -21,7 +21,7 @@ $(document).ready(function(){
 	socket.on('getAllLetters',function (data) {
 		$('#letters').html('');
 		for(i in data){
-			var key = data[i].ip_address.substring(0,6);
+			var key = data[i].ip_address.substring(data[i].ip_address.length -6,data[i].ip_address.length);
 			apppendCssClass(key);
 			$('#letters').append('<div class="letter user_' + key + '">' + data[i].letter + '</div>')
 		}
