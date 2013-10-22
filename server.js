@@ -3,7 +3,7 @@ var http = require('http');
 var mysql = require("mysql"); 
 var app = require('express')();
 var server = require('http').createServer(app)
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server, { log: false });
 var crypto = require('crypto');
 
 // Create the connection. 

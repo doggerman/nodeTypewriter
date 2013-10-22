@@ -27,6 +27,12 @@ $(document).ready(function(){
 		}
 	});
 
+	socket.on('getNewLetter',function (data) {
+		var key = data.ip_address.substring(data.ip_address.length -6,data.ip_address.length);
+		apppendCssClass(key);
+		$('#letters').append('<div class="letter user_' + key + '">' + data.letter + '</div>');
+	});
+
 	$(document).keypress(function(e){
 		var letter = String.fromCharCode(e.keyCode)
 		if(typeof(letter) == 'string' && letter != ''){
