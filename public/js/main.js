@@ -53,7 +53,7 @@ $(document).ready(function(){
 			color: #'+key+';\
 			background: rgba( ' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', 0.2);\
 			border-color: #'+ key +'; \
-			text-shadow: 0px 0px 2px rgba( ' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', 0.5);
+			text-shadow: 0px 0px 2px rgba( ' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', 0.5);\
 		}';
 		document.getElementsByTagName('head')[0].appendChild(style);
 	}
