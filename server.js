@@ -66,18 +66,13 @@ app.get('/', function(req, res){
 io.sockets.on('connection', function (socket) {
 
 	socket.on('init',function(){
-		console.log('Init');
 		getAllLetters(function(all_letters){
-			console.log('Get All Letters');
-			console.log(all_letters);
 			socket.emit('getAllLetters', all_letters);
 		});
 		getCurrentUser(function(user_array){
-			console.log('Get User');
 			socket.emit('getUser', user_array);
 		});
 		getAllUsers(function(all_users_array){
-			console.log('Get All Users');
 			socket.emit('getAllUsers', all_users_array);
 		});
 	});
@@ -138,7 +133,9 @@ function getCurrentUser(callback){
 	// Get Ip Address
 	getIpAddress(function(error, ip){
 		// Encrypt IP address (Goes in the DB)
-		var encrypted_ip = crypto.createHash('md5').update(ip[0]).digest("hex")
+		var encrypted_ip = crypto.createHash('md5').update(ip[0]).digest("hex");
+		console.log('IP Address: ' + ip[0]);
+		console.log('Encrypted : ' + encrypted_ip)
 		connection.query('SELECT * FROM users WHERE ip_address = ?',[encrypted_ip], function (error, results) { 
 			if(results.length > 0){
 				callback(results[0]); 
