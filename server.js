@@ -66,7 +66,7 @@ app.get('/', function(req, res){
 io.sockets.on('connection', function (socket) {
 
 	var address = socket.handshake.address;
-	console.log('Socket connection :' + address.address);
+	console.log('Socket connection : ' + address.address);
     var encrypted_ip = crypto.createHash('md5').update(address.address).digest("hex");
     socket.emit('getIpAddress', encrypted_ip);
 

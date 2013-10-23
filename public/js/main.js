@@ -32,13 +32,17 @@ $(document).ready(function(){
 	-------------------- */
 
 	socket.on('getIpAddres', function(encrypted_ip_address){
+		console.log('Got Ip Address : ' + encrypted_ip_address);
 		eia = encrypted_ip_address;
+		console.log(' Emit Init');
 		socket.emit('init', eia);
 	});
 	
 
 	// On, init Get all Letter from Database
 	socket.on('getAllLetters',function (data) {
+		console.log('getAllLetters');
+		console.log(data);
 		$('#letters').html('');
 		for(i in data){
 			$('#letters').append('<div id="' + data[i].id + '" class="letter user-' + data[i].user + '">' + data[i].letter + '</div>');
@@ -47,11 +51,15 @@ $(document).ready(function(){
 
 	// On Init, get Current User (from IP address)
 	socket.on('getUser', function(user){
+		console.log('get user');
+		console.log(user);
 		this_user = user;
 	});
 
 	// On Get New Letter, Add The Letter
 	socket.on('getNewLetter',function (data) {
+		console.log('getNewLetter');
+		console.log(data);
 		$('#letters').append('<div id="' + data.id + '" class="letter user-' + data.user + '">' + data.letter + '</div>');
 	});
 
