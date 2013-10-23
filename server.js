@@ -53,7 +53,7 @@ app.post('/api/insert/', function(req, res){
 app.get('/', function(req, res){
 	console.log('Getting Index')
 	console.log('IP:' + req.ip);
-	console.log(getIp());
+	console.log(getIp(req));
 	res.sendfile('public/index.html');
 });
 
@@ -66,7 +66,6 @@ app.get('/', function(req, res){
 io.sockets.on('connection', function (socket) {
 
 	console.log('socket connection');
-	console.log(getIp());
 
 	socket.on('init',function(){
 		getAllLetters(function(all_letters){
@@ -257,9 +256,9 @@ function generateRandomHexColor(){
 	return '#'+Math.floor(Math.random()*16777215).toString(16);
 }
 
-function getIp(){
-	return req.headers['x-forwarded-for'] || 
-     req.connection.remoteAddress || 
-     req.socket.remoteAddress ||
-     req.connection.socket.remoteAddress;
+function getIp(req){
+	var ip = req.headers['x-forwarded-for'] || 
+		req.connection.remoteAddress || 
+		req.socket.remoteAddress ||
+		req.connection.socket.remoteAddress;
 }
