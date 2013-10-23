@@ -34,9 +34,7 @@ app.configure(function(){
 
 // Get Letters
 app.get('/api/letters/', function(req, res){
-	getAllLetters(function(data){
-		// Parse into a json
-	});
+	res.send('This feautre is unavailable');
 });
 
 // Get Letters
@@ -49,12 +47,13 @@ app.get('/api/delete_all/', function(req, res){
 
 // Insert Letter
 app.post('/api/insert/', function(req, res){
-	insertLetterIntoDatabase(req.body.letter);
-	// Parse Response into JSON
+	res.send('This feautre is unavailable');
 });
 
 app.get('/', function(req, res){
-	console.log(req.ip);
+	console.log('Getting Index')
+	console.log('IP:' + req.ip);
+	console.log(getIp());
 	res.sendfile('public/index.html');
 });
 
@@ -66,7 +65,8 @@ app.get('/', function(req, res){
 
 io.sockets.on('connection', function (socket) {
 
-	console.log(socket);
+	console.log('socket connection');
+	console.log(getIp());
 
 	socket.on('init',function(){
 		getAllLetters(function(all_letters){
@@ -255,4 +255,11 @@ function get_location(host, path, this_calback){
 
 function generateRandomHexColor(){
 	return '#'+Math.floor(Math.random()*16777215).toString(16);
+}
+
+function getIp {
+	return req.headers['x-forwarded-for'] || 
+     req.connection.remoteAddress || 
+     req.socket.remoteAddress ||
+     req.connection.socket.remoteAddress;
 }
