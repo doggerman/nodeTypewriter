@@ -68,6 +68,7 @@ io.sockets.on('connection', function (socket) {
 	console.log('socket connection');
 
 	var address = socket.handshake.address;
+	console.log(' *** ');
     console.log("New connection from " + address.address + ":" + address.port);
 
 	socket.on('init',function(){
@@ -139,8 +140,8 @@ function getCurrentUser(callback){
 	getIpAddress(function(error, ip){
 		// Encrypt IP address (Goes in the DB)
 		var encrypted_ip = crypto.createHash('md5').update(ip[0]).digest("hex");
-		console.log('IP Address: ' + ip[0]);
-		console.log('Encrypted : ' + encrypted_ip)
+		console.log(' + IP Address: ' + ip[0]);
+		console.log(' + Encrypted : ' + encrypted_ip)
 		connection.query('SELECT * FROM users WHERE ip_address = ?',[encrypted_ip], function (error, results) { 
 			if(results.length > 0){
 				callback(results[0]); 
