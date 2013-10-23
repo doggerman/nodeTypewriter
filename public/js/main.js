@@ -14,6 +14,7 @@ $(document).ready(function(){
 
 	var this_user;
 	var all_users;
+	var eia;
 
 	if(document.domain == 'localhost'){
 		console.log('Connecting to localhost');
@@ -30,7 +31,11 @@ $(document).ready(function(){
 
 	-------------------- */
 
-	socket.emit('init');
+	socket.on('getIpAddres', function(encrypted_ip_address){
+		eia = encrypted_ip_address;
+		socket.emit('init', eia);
+	});
+	
 
 	// On, init Get all Letter from Database
 	socket.on('getAllLetters',function (data) {

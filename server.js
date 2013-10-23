@@ -65,17 +65,16 @@ app.get('/', function(req, res){
 
 io.sockets.on('connection', function (socket) {
 
-	console.log('socket connection');
-
 	var address = socket.handshake.address;
-	console.log(' *** ');
-    console.log("New connection from " + address.address + ":" + address.port);
+	console.log('Socket connection :' + address.address);
+    var encrypted_ip = crypto.createHash('md5').update(address.address).digest("hex");
+    socket.emit('getIpAddress', encrypted_ip);
 
-	socket.on('init',function(){
+	socket.on('init',function(eia){
 		getAllLetters(function(all_letters){
 			socket.emit('getAllLetters', all_letters);
 		});
-		getCurrentUser(function(user_array){
+		getCurrentUser(eia, function(user_array){
 			socket.emit('getUser', user_array);
 		});
 		getAllUsers(function(all_users_array){
@@ -135,40 +134,36 @@ function getAllUsers(callback){
 	});
 }
 
-function getCurrentUser(callback){
+function getCurrentUser(eia, callback){
 	// Get Ip Address
-	getIpAddress(function(error, ip){
-		// Encrypt IP address (Goes in the DB)
-		var encrypted_ip = crypto.createHash('md5').update(ip[0]).digest("hex");
-		console.log(' + IP Address: ' + ip[0]);
-		console.log(' + Encrypted : ' + encrypted_ip)
-		connection.query('SELECT * FROM users WHERE ip_address = ?',[encrypted_ip], function (error, results) { 
-			if(results.length > 0){
-				callback(results[0]); 
-			}
-			else {
-				// Get Location
-				var location = get_location('api.hostip.info', '/get_json.php?ip=' + ip[0], function(response){
-					/* Users
-					| id         | int(11)      | NO   | PRI | NULL    | auto_increment |
-					| color      | varchar(255) | YES  |     | NULL    |                |
-					| ip_address | varchar(255) | YES  |     | NULL    |                |
-					| location   | varchar(255) | YES  |     | NULL    |      
-					*/
-					var responseLocation = response.city + ", " + response.country_code;
-					var color = generateRandomHexColor();
-					connection.query('INSERT INTO users SET ?', { color: color, ip_address: encrypted_ip, location: responseLocation }, function(err, result){
-						var query_response = {
-							id : result.insertId,
-							color : color, 
-							location : responseLocation,
-						}
-						callback(query_response);
-					});
+	// Encrypt IP address (Goes in the DB)
+	console.log(' + Encrypted : ' + eia)
+	connection.query('SELECT * FROM users WHERE ip_address = ?',[encrypted_ip], function (error, results) { 
+		if(results.length > 0){
+			callback(results[0]); 
+		}
+		else {
+			// Get Location
+			var location = get_location('api.hostip.info', '/get_json.php?ip=' + ip[0], function(response){
+				/* Users
+				| id         | int(11)      | NO   | PRI | NULL    | auto_increment |
+				| color      | varchar(255) | YES  |     | NULL    |                |
+				| ip_address | varchar(255) | YES  |     | NULL    |                |
+				| location   | varchar(255) | YES  |     | NULL    |      
+				*/
+				var responseLocation = response.city + ", " + response.country_code;
+				var color = generateRandomHexColor();
+				connection.query('INSERT INTO users SET ?', { color: color, ip_address: encrypted_ip, location: responseLocation }, function(err, result){
+					var query_response = {
+						id : result.insertId,
+						color : color, 
+						location : responseLocation,
+					}
+					callback(query_response);
 				});
-			}
-		});
-	}, false);
+			});
+		}
+	});
 }
 
 function deleteAllLetters(callback){
@@ -182,55 +177,6 @@ function deleteAllLetters(callback){
 	Utilities
 
 -------------------- */
-
-var getIpAddress = (function () {
-    var ignoreRE = /^(127\.0\.0\.1|::1|fe80(:1)?::1(%.*)?)$/i;
-
-    var exec = require('child_process').exec;
-    var cached;
-    var command;
-    var filterRE;
-
-    switch (process.platform) {
-    case 'win32':
-    //case 'win64': // TODO: test
-        command = 'ipconfig';
-        filterRE = /\bIPv[46][^:\r\n]+:\s*([^\s]+)/g;
-        break;
-    case 'darwin':
-        command = 'ifconfig';
-        filterRE = /\binet\s+([^\s]+)/g;
-        // filterRE = /\binet6\s+([^\s]+)/g; // IPv6
-        break;
-    default:
-        command = 'ifconfig';
-        filterRE = /\binet\b[^:]+:\s*([^\s]+)/g;
-        // filterRE = /\binet6[^:]+:\s*([^\s]+)/g; // IPv6
-        break;
-    }
-
-    return function (callback, bypassCache) {
-        if (cached && !bypassCache) {
-            callback(null, cached);
-            return;
-        }
-        // system call
-        exec(command, function (error, stdout, sterr) {
-            cached = [];
-            var ip;
-            var matches = stdout.match(filterRE) || [];
-            //if (!error) {
-            for (var i = 0; i < matches.length; i++) {
-                ip = matches[i].replace(filterRE, '$1')
-                if (!ignoreRE.test(ip)) {
-                    cached.push(ip);
-                }
-            }
-            //}
-            callback(error, cached);
-        });
-    };
-})();
 
 function get_location(host, path, this_calback){
 	//The url we want is: 'www.random.org/integers/?num=1&min=1&max=10&col=1&base=10&format=plain&rnd=new'
