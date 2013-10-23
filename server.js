@@ -257,7 +257,7 @@ function generateRandomHexColor(){
 	return '#'+Math.floor(Math.random()*16777215).toString(16);
 }
 
-function getIp {
+function getIp(){
 	return req.headers['x-forwarded-for'] || 
      req.connection.remoteAddress || 
      req.socket.remoteAddress ||
