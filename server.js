@@ -51,7 +51,7 @@ app.post('/api/insert/', function(req, res){
 });
 
 app.get('/', function(req, res){
-	console.log('Getting Index')
+	console.log('Getting Index');
 	console.log('IP:' + req.ip);
 	console.log(getIp(req));
 	res.sendfile('public/index.html');
@@ -66,6 +66,9 @@ app.get('/', function(req, res){
 io.sockets.on('connection', function (socket) {
 
 	console.log('socket connection');
+
+	var address = socket.handshake.address;
+    console.log("New connection from " + address.address + ":" + address.port);
 
 	socket.on('init',function(){
 		getAllLetters(function(all_letters){
