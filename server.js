@@ -54,6 +54,7 @@ app.post('/api/insert/', function(req, res){
 });
 
 app.get('/', function(req, res){
+	console.log(req.ip);
 	res.sendfile('public/index.html');
 });
 
@@ -64,6 +65,8 @@ app.get('/', function(req, res){
 -------------------- */
 
 io.sockets.on('connection', function (socket) {
+
+	console.log(socket);
 
 	socket.on('init',function(){
 		getAllLetters(function(all_letters){
