@@ -68,7 +68,6 @@ io.sockets.on('connection', function (socket) {
 	var ip_address = socket.handshake.address.address;
 	console.log('Socket connection : ' + ip_address);
     var encrypted_ip_address = crypto.createHash('md5').update(ip_address).digest("hex");
-    console.log(' + Encrypted : ' + encrypted_ip_address);
     socket.emit('getIpAddress', encrypted_ip_address);
 
 	socket.on('init',function(eia){
@@ -140,7 +139,7 @@ function getCurrentUser(eia, callback){
 	// Get Ip Address
 	// Encrypt IP address (Goes in the DB)
 	console.log(' + Encrypted : ' + eia)
-	connection.query('SELECT * FROM users WHERE ip_address = ?',[encrypted_ip], function (error, results) { 
+	connection.query('SELECT * FROM users WHERE ip_address = ?',[eia], function (error, results) { 
 		if(results.length > 0){
 			callback(results[0]); 
 		}
@@ -155,7 +154,7 @@ function getCurrentUser(eia, callback){
 				*/
 				var responseLocation = response.city + ", " + response.country_code;
 				var color = generateRandomHexColor();
-				connection.query('INSERT INTO users SET ?', { color: color, ip_address: encrypted_ip, location: responseLocation }, function(err, result){
+				connection.query('INSERT INTO users SET ?', { color: color, ip_address: eia, location: responseLocation }, function(err, result){
 					var query_response = {
 						id : result.insertId,
 						color : color, 
