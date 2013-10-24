@@ -51,9 +51,6 @@ app.post('/api/insert/', function(req, res){
 });
 
 app.get('/', function(req, res){
-	console.log('Getting Index');
-	console.log('IP:' + req.ip);
-	console.log(getIp(req));
 	res.sendfile('public/index.html');
 });
 
@@ -75,7 +72,7 @@ io.sockets.on('connection', function (socket) {
 		getAllLetters(function(all_letters){
 			socket.emit('getAllLetters', all_letters);
 		});
-		getCurrentUser(eia, function(user_array){
+		getCurrentUser(eia, ip_address, function(user_array){
 			socket.emit('getUser', user_array);
 		});
 		getAllUsers(function(all_users_array){
@@ -135,7 +132,7 @@ function getAllUsers(callback){
 	});
 }
 
-function getCurrentUser(eia, callback){
+function getCurrentUser(eia, ip_address, callback){
 	// Get Ip Address
 	// Encrypt IP address (Goes in the DB)
 	console.log(' + Encrypted : ' + eia)
@@ -145,7 +142,7 @@ function getCurrentUser(eia, callback){
 		}
 		else {
 			// Get Location
-			var location = get_location('api.hostip.info', '/get_json.php?ip=' + ip[0], function(response){
+			var location = get_location('api.hostip.info', '/get_json.php?ip=' + ip_address, function(response){
 				/* Users
 				| id         | int(11)      | NO   | PRI | NULL    | auto_increment |
 				| color      | varchar(255) | YES  |     | NULL    |                |
@@ -205,11 +202,4 @@ function get_location(host, path, this_calback){
 
 function generateRandomHexColor(){
 	return '#'+Math.floor(Math.random()*16777215).toString(16);
-}
-
-function getIp(req){
-	var ip = req.headers['x-forwarded-for'] || 
-		req.connection.remoteAddress || 
-		req.socket.remoteAddress ||
-		req.connection.socket.remoteAddress;
 }
