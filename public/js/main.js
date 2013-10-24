@@ -12,9 +12,7 @@ Styling...
 
 $(document).ready(function(){
 
-	var this_user;
-	var all_users;
-	var eia;
+	var this_user, all_users, eia, all_letters;
 
 	if(document.domain == 'localhost'){
 		console.log('Connecting to localhost');
@@ -42,16 +40,16 @@ $(document).ready(function(){
 	socket.on('getAllLetters',function (data) {
 		console.log('getAllLetters');
 		console.log(data);
+		all_letters = data;
 		$('#letters').html('');
-		for(i in data){
-			$('#letters').append('<div id="' + data[i].id + '" class="letter user-' + data[i].user + '">' + data[i].letter + '</div>');
+		for(i in all_letters){
+			var html = '<div id="' + all_letters[i].id + '" class="letter user-' + all_letters[i].user + '">' + all_letters[i].letter + '</div>';
+			$('#letters').append(html);
 		}
 	});
 
 	// On Init, get Current User (from IP address)
 	socket.on('getUser', function(user){
-		console.log('get user');
-		console.log(user);
 		this_user = user;
 	});
 
@@ -59,6 +57,7 @@ $(document).ready(function(){
 	socket.on('getNewLetter',function (data) {
 		console.log('getNewLetter');
 		console.log(data);
+		all_letters[data.id] = data;
 		$('#letters').append('<div id="letter-' + data.id + '" class="letter user-' + data.user + '">' + data.letter + '</div>');
 	});
 
@@ -68,7 +67,6 @@ $(document).ready(function(){
 		console.log(data);
 		all_users = data;
 		for(i in all_users){
-
 			apppendCssClass(data[i].id, data[i].color);
 		}
 	});
@@ -85,10 +83,16 @@ $(document).ready(function(){
 
 	$(document).keypress(function(e){
 		console.log(e.keyCode);
-		var letter = String.fromCharCode(e.keyCode);
-		if(typeof(letter) == 'string' && letter != ''){
-			socket.emit('inserLetter', { letter: letter, user: this_user.id });
+		if(e.keyCode === 8) {
+			deleteLastUserLetter();
 		}
+		else {
+			var letter = String.fromCharCode(e.keyCode);
+			if(typeof(letter) == 'string' && letter != ''){
+				socket.emit('inserLetter', { letter: letter, user: this_user.id });
+			}
+		}
+		e.preventDefault();
 	})
 
 	/* --------------------
@@ -139,6 +143,10 @@ $(document).ready(function(){
 			g: parseInt(result[2], 16),
 			b: parseInt(result[3], 16)
 		} : null;
+	}
+
+	function deleteLastUserLetter(){
+		// socket.emit('deleteLetter', this_user.id);
 	}
 
 });
