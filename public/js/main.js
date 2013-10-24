@@ -31,14 +31,13 @@ $(document).ready(function(){
 
 	-------------------- */
 
-	socket.on('getIpAddres', function(encrypted_ip_address){
+	socket.on('getIpAddress', function(encrypted_ip_address){
 		console.log('Got Ip Address : ' + encrypted_ip_address);
 		eia = encrypted_ip_address;
 		console.log(' Emit Init');
 		socket.emit('init', eia);
 	});
 	
-
 	// On, init Get all Letter from Database
 	socket.on('getAllLetters',function (data) {
 		console.log('getAllLetters');

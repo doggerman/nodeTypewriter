@@ -65,12 +65,14 @@ app.get('/', function(req, res){
 
 io.sockets.on('connection', function (socket) {
 
-	var address = socket.handshake.address;
-	console.log('Socket connection : ' + address.address);
-    var encrypted_ip = crypto.createHash('md5').update(address.address).digest("hex");
-    socket.emit('getIpAddress', encrypted_ip);
+	var ip_address = socket.handshake.address.address;
+	console.log('Socket connection : ' + ip_address);
+    var encrypted_ip_address = crypto.createHash('md5').update(ip_address).digest("hex");
+    console.log(' + Encrypted : ' + encrypted_ip_address);
+    socket.emit('getIpAddress', encrypted_ip_address);
 
 	socket.on('init',function(eia){
+		console.log('init : ' + eia);
 		getAllLetters(function(all_letters){
 			socket.emit('getAllLetters', all_letters);
 		});
