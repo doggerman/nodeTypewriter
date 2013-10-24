@@ -84,7 +84,10 @@ $(document).ready(function(){
 	$(document).keypress(function(e){
 		console.log(e.keyCode);
 		if(e.keyCode === 8) {
+			console.log('DELETE KEY')
 			deleteLastUserLetter();
+			e.preventDefault();
+			e.stopPropagation();
 		}
 		else {
 			var letter = String.fromCharCode(e.keyCode);
@@ -92,7 +95,7 @@ $(document).ready(function(){
 				socket.emit('inserLetter', { letter: letter, user: this_user.id });
 			}
 		}
-		e.preventDefault();
+		
 	})
 
 	/* --------------------
