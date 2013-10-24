@@ -88,6 +88,14 @@ io.sockets.on('connection', function (socket) {
 		})
 	});
 
+	socket.on('deleteLetter', function (user_id) {
+		deleteLetter(user_id, function(letter_id){
+			// Emit Letter Before Mysql Query
+			// Emit to all users
+			io.sockets.emit('getDeletedLetter', letter_id);
+		})
+	});
+
 });
 
 /* --------------------

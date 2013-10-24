@@ -59,7 +59,7 @@ $(document).ready(function(){
 	socket.on('getNewLetter',function (data) {
 		console.log('getNewLetter');
 		console.log(data);
-		$('#letters').append('<div id="' + data.id + '" class="letter user-' + data.user + '">' + data.letter + '</div>');
+		$('#letters').append('<div id="letter-' + data.id + '" class="letter user-' + data.user + '">' + data.letter + '</div>');
 	});
 
 	// On Get New Letter, Add The Letter
@@ -73,6 +73,10 @@ $(document).ready(function(){
 		}
 	});
 
+	socket.on('getDeletedLetter', function(letter_id){
+		$("#letter-" + letter_id).remove();
+	});
+
 	/* --------------------
 
 	Keypress bind
@@ -80,7 +84,8 @@ $(document).ready(function(){
 	-------------------- */
 
 	$(document).keypress(function(e){
-		var letter = String.fromCharCode(e.keyCode)
+		console.log(e.keyCode);
+		var letter = String.fromCharCode(e.keyCode);
 		if(typeof(letter) == 'string' && letter != ''){
 			socket.emit('inserLetter', { letter: letter, user: this_user.id });
 		}
