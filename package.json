@@ -2,13 +2,13 @@
   "name": "nodetypewriter",
   "version": "0.0.1",
   "dependencies": {
-  	"crypto" : "1.3.x",
-    "express": "3.4.x",
-    "mysql" : "2.0.x",
-    "socket.io" : "0.9.x",
+  	"crypto" : "0.0.3",
+    "express": "3.4.3",
+    "mysql" : "2.0.0",
+    "socket.io" : "0.9.16",
   },
   "engines": {
-    "node": "0.10.x",
-    "npm": "1.2.x"
+    "node": "0.10.21",
+    "npm": "1.3.11"
   }
 }
