@@ -4,7 +4,7 @@
     "dependencies": {
         "crypto": "0.0.3",
         "express": "3.4.3",
-        "mysql": "2.0.0",
+        "mysql": "2.0.0-alpha9",
         "socket.io": "0.9.16"
     },
     "engines": {
