@@ -88,8 +88,10 @@ io.sockets.on('connection', function (socket) {
 		})
 	});
 
-	socket.on('deleteLetter', function (letter_id) {
-		deleteLetter(letter_id, function(letter_id){
+	socket.on('deleteLetter', function (letter) {
+		console.log('DELETE LETTER ON');
+		console.log(letter);
+		deleteLetter(letter, function(letter_id){
 			// Emit Letter Before Mysql Query
 			// Emit to all users
 			io.sockets.emit('getDeletedLetter', letter_id);
@@ -111,8 +113,6 @@ function insertLetter(data, callback){
 	}
 	var query = connection.query('INSERT INTO letters SET ?', letter_query, function(err, result) {
 		if (err) throw err;
-		console.log('insert query result');
-		console.log(result);
 		query_response = {
 			id : result.insertId,
 			letter: data.letter, 
@@ -171,6 +171,17 @@ function getCurrentUser(eia, ip_address, callback){
 				});
 			});
 		}
+	});
+}
+
+function deleteLetter(letter, callback){
+	console.log(' --- LETTER ----');
+	console.log(letter);
+	console.log(letter.id);
+	connection.query('DELETE FROM letters WHERE id = ?', [letter.id], function(err, result){
+		console.log('DELETE LETTER');
+		console.log(result);
+		callback(letter.id);
 	});
 }
 

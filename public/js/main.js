@@ -30,20 +30,16 @@ $(document).ready(function(){
 	-------------------- */
 
 	socket.on('getIpAddress', function(encrypted_ip_address){
-		console.log('Got Ip Address : ' + encrypted_ip_address);
 		eia = encrypted_ip_address;
-		console.log(' Emit Init');
 		socket.emit('init', eia);
 	});
 	
 	// On, init Get all Letter from Database
 	socket.on('getAllLetters',function (data) {
-		console.log('getAllLetters');
-		console.log(data);
 		all_letters = data;
 		$('#letters').html('');
 		for(i in all_letters){
-			var html = '<div id="' + all_letters[i].id + '" class="letter user-' + all_letters[i].user + '">' + all_letters[i].letter + '</div>';
+			var html = '<div id="letter-' + all_letters[i].id + '" class="letter user-' + all_letters[i].user + '">' + all_letters[i].letter + '</div>';
 			$('#letters').append(html);
 		}
 	});
@@ -55,16 +51,12 @@ $(document).ready(function(){
 
 	// On Get New Letter, Add The Letter
 	socket.on('getNewLetter',function (data) {
-		console.log('getNewLetter');
-		console.log(data);
 		all_letters[data.id] = data;
 		$('#letters').append('<div id="letter-' + data.id + '" class="letter user-' + data.user + '">' + data.letter + '</div>');
 	});
 
 	// On Get New Letter, Add The Letter
 	socket.on('getAllUsers',function (data) {
-		console.log('users');
-		console.log(data);
 		all_users = data;
 		for(i in all_users){
 			apppendCssClass(data[i].id, data[i].color);
@@ -72,7 +64,10 @@ $(document).ready(function(){
 	});
 
 	socket.on('getDeletedLetter', function(letter_id){
+		console.log('Deleteting Letter : ' + letter_id);
 		$("#letter-" + letter_id).remove();
+		console.log($("#letter-" + letter_id));
+		delete all_letters[letter_id];
 	});
 
 	/* --------------------
@@ -81,22 +76,28 @@ $(document).ready(function(){
 
 	-------------------- */
 
-	$(document).keypress(function(e){
-		console.log(e.keyCode);
-		if(e.keyCode === 8) {
-			console.log('DELETE KEY')
+	$('#dummy-textarea').focus();
+	$(document).click(function(){
+		$('#dummy-textarea').focus();
+	});
+
+	document.onkeydown = KeyCheck;  //or however you are calling your method
+	function KeyCheck(e){
+		if(e.keyCode === 8 || e.keyCode === 46) {
 			deleteLastUserLetter();
-			e.preventDefault();
-			e.stopPropagation();
 		}
-		else {
-			var letter = String.fromCharCode(e.keyCode);
+	}
+
+	$(document).keypress(function(e) {
+		if(!(e.keyCode === 8 || e.keyCode === 46)) {
+			console.log(e);
+			var letter = String.fromCharCode(e.which||e.charCode||e.keyCode);
+			console.log(letter + " / " + e.keyCode);
 			if(typeof(letter) == 'string' && letter != ''){
 				socket.emit('inserLetter', { letter: letter, user: this_user.id });
 			}
 		}
-		
-	})
+	});
 
 	/* --------------------
 
@@ -149,7 +150,29 @@ $(document).ready(function(){
 	}
 
 	function deleteLastUserLetter(){
-		// socket.emit('deleteLetter', this_user.id);
+		var letters = findALlLettersByThisUser(this_user.id, all_letters);
+		var last_letter = findLastLetter(letters);
+		console.log(this_user.id, last_letter);
+		socket.emit('deleteLetter', { id : last_letter.id, user : this_user.id });
+	}
+
+	function findALlLettersByThisUser(user_id, letters){
+		var return_array = {};
+		for(i in letters){
+			if(letters[i].user == user_id){
+				return_array[letters[i].id] = letters[i];
+			}
+		}
+		return return_array;
+	}
+
+	function findLastLetter(dictionary){
+		var all_keys = []; 
+		for (i in dictionary){
+			all_keys.push(i);
+		}
+		all_keys.reverse(); 
+		return dictionary[all_keys[0]];
 	}
 
 });
