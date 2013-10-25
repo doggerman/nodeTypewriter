@@ -8,7 +8,11 @@ var crypto = require('crypto');
 
 // Create the connection. 
 // Data is default to new mysql installation and should be changed according to your configuration. 
-var connection = mysql.createConnection({ user: "thejsj_node_test", password: "ursulita", database: "thejsj_node_test" }); 
+var connection = mysql.createConnection({ 
+	user: "thejsj_node_test", 
+	password: "ursulita", 
+	database: "thejsj_node_test" 
+}); 
 
 if(process.argv[2] == 'local'){
 	console.log(' Listening to Port: 8080');
