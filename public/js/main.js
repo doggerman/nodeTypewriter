@@ -22,7 +22,8 @@ $(document).ready(function(){
 		// var host = location.origin.replace(/^http/, '')
 		console.log('Connecting to http://gentle-cliffs-9860.herokuapp.com/');
 		// var socket = io.connect('ws://gentle-cliffs-9860.herokuapp.com/');
-		var socket = io.connect(window.location.hostname);
+		// var socket = io.connect(window.location.hostname);
+		var socket = new io.Socket();
 	}
 
 	/* --------------------
