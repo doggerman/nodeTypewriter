@@ -9,7 +9,7 @@ var crypto = require('crypto');
 var port = process.env.PORT || 8080;
 
 // Create the connection. 
-var conString = process.env.DATABASE_URL || "postgres://thejsj_node_test:@localhost/thejsj_node_test";
+var conString = process.env.HEROKU_POSTGRESQL_YELLOW_URL || "postgres://thejsj_node_test:@localhost/thejsj_node_test";
 
 var client = new pg.Client(conString);
 client.connect(function(err) {
