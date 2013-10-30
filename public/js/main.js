@@ -43,7 +43,7 @@ $(document).ready(function(){
 		all_letters = data;
 		$('#letters').html('');
 		for(i in all_letters){
-			var html = '<div id="' + all_letters[i].id + '" class="letter user-' + all_letters[i].user + '">' + all_letters[i].letter + '</div>';
+			var html = '<div id="letter-' + all_letters[i].id + '" class="letter user-' + all_letters[i].user + '">' + all_letters[i].letter + '</div>';
 			$('#letters').append(html);
 		}
 	});
@@ -72,7 +72,11 @@ $(document).ready(function(){
 	});
 
 	socket.on('getDeletedLetter', function(letter_id){
+		console.log(" ++ getDeletedLetter : " + letter_id);
+		console.log(all_letters.length);
+		delete all_letters[letter_id];
 		$("#letter-" + letter_id).remove();
+		console.log(all_letters.length);
 	});
 
 	/* --------------------
@@ -81,15 +85,18 @@ $(document).ready(function(){
 
 	-------------------- */
 
-	$(document).keypress(function(e){
+	window.onkeydown = function(e){
 		console.log(e.keyCode);
-		if(e.keyCode === 8) {
+		if(e.keyCode === 8 || e.keyCode === 46) {
 			console.log('DELETE KEY')
-			deleteLastUserLetter();
 			e.preventDefault();
 			e.stopPropagation();
+			deleteLastUserLetter();
 		}
-		else {
+	}
+
+	$(document).keypress(function(e){
+		if(e.keyCode != 8) {
 			var letter = String.fromCharCode(e.keyCode);
 			if(typeof(letter) == 'string' && letter != ''){
 				socket.emit('inserLetter', { letter: letter, user: this_user.id });
@@ -149,7 +156,26 @@ $(document).ready(function(){
 	}
 
 	function deleteLastUserLetter(){
-		// socket.emit('deleteLetter', this_user.id);
+		//
+		// Get Last Letter By This User
+		// 
+		// Get All keys
+		var all_keys = [];
+		for(i in all_letters){ all_keys.push(i); }
+		// Reverse Keys
+		var all_keys_reverse = all_keys.reverse();
+		console.log(all_keys);
+		console.log(all_letters);
+		// Search For Last Key
+		for(var i = 0; i < all_keys_reverse.length; i++){
+			console.log(all_keys_reverse[i]);
+			if(all_letters[all_keys_reverse[i]].user_id == this_user.id){
+				console.log('THIS LETTER: ' + all_letters[all_keys_reverse[i]]);
+				var deleted_letter_id = all_letters[all_keys_reverse[i]].id;
+				break;
+			}
+		}
+		socket.emit('deleteLetter', deleted_letter_id);
 	}
 
 });

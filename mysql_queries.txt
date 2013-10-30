@@ -36,3 +36,7 @@ create table users (
 	ip_address varchar(255),
 	location varchar(255)
 );
+
+ALTER TABLE letters ADD COLUMN vendor_name varchar(25);
+
+- See more at: http://www.w3resource.com/PostgreSQL/postgresql-alter-table.php#sthash.ct3pfh8u.dpuf
