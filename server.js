@@ -3,9 +3,9 @@ var http = require('http');
 var mysql = require("mysql"); 
 var pg = require('pg'); 
 var app = require('express')();
-var server = require('http').createServer(app)
+var server = require('http').createServer(app);
 var port = process.env.PORT || 8080;
-var io = require('socket.io').listen(port);
+var io = require('socket.io').listen(server, { log: false });
 var crypto = require('crypto');
 
 
@@ -36,10 +36,11 @@ app.configure(function(){
 // Heroku won't actually allow us to use WebSockets
 // so we have to setup polling instead.
 // https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
-io.configure(function () { 
-  io.set("transports", ["xhr-polling"]); 
-  io.set("polling duration", 12); 
+io.configure(function () {
+  io.set("transports", ["xhr-polling"]);
+  io.set("polling duration", 10);
 });
+
 
 /* --------------------
 
