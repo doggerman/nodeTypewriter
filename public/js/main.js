@@ -72,11 +72,8 @@ $(document).ready(function(){
 	});
 
 	socket.on('getDeletedLetter', function(letter_id){
-		console.log(" ++ getDeletedLetter : " + letter_id);
-		console.log(all_letters.length);
 		delete all_letters[letter_id];
 		$("#letter-" + letter_id).remove();
-		console.log(all_letters.length);
 	});
 
 	/* --------------------

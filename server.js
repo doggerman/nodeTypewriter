@@ -8,13 +8,6 @@ var io = require('socket.io').listen(server, { log: false });
 var crypto = require('crypto');
 
 // Create the connection. 
-// Data is default to new mysql installation and should be changed according to your configuration. 
-var connection = mysql.createConnection({ 
-	user: "thejsj_node_test", 
-	password: "ursulita", 
-	database: "thejsj_node_test" 
-}); 
-
 var conString = "postgres://thejsj_node_test:@localhost/thejsj_node_test";
 var client = new pg.Client(conString);
 client.connect(function(err) {
@@ -105,11 +98,9 @@ io.sockets.on('connection', function (socket) {
 	});
 
 	socket.on('deleteLetter', function (letter_id) {
-		console.log('DELETE LETTER: ' + letter_id);
 		deleteLetter(letter_id, function(letter_id){
 			// Emit Letter Before Mysql Query
 			// Emit to all users
-			console.log('EMMITING THE LETTERT : ' + letter_id);
 			io.sockets.emit('getDeletedLetter', letter_id);
 		})
 	});
@@ -127,17 +118,6 @@ function insertLetter(data, callback){
 		letter: data.letter, 
 		user: data.user,
 	}
-	// var query = connection.query('INSERT INTO letters SET ?', letter_query, function(err, result) {
-	// 	if (err) throw err;
-	// 	console.log('insert query result');
-	// 	console.log(result);
-	// 	query_response = {
-	// 		id : result.insertId,
-	// 		letter: data.letter, 
-	// 		user: data.user,
-	// 	}
-	// 	callback(query_response);
-	// });
 	var query = client.query('INSERT INTO letters (letter, user_id) values ($1, $2) RETURNING id', 
 		[letter_query.letter, letter_query.user], 
 		function(err, result) {
@@ -145,7 +125,6 @@ function insertLetter(data, callback){
 			console.log("Database query Error: insertLetter");
 			console.log(err);
 		}
-		console.log('insert query result');
 		query_response = {
 			id : result.rows[0].id,
 			letter: data.letter, 
@@ -156,19 +135,11 @@ function insertLetter(data, callback){
 }
 
 function getAllLetters(callback){
-	// connection.query('SELECT * FROM letters;', function (error, rows, fields) { 
-	// 	var new_dict = {}; 
-	// 	for(i in rows){
-	// 		new_dict[rows[i].id] = rows[i];
-	// 	}
-	// 	callback(new_dict);
-	// });
 	var query = client.query('SELECT * FROM letters', function(err, result) {
 		if(err){
 			console.log("Database query Error: getAllLetters");
 			console.log(err);
 		}
-		console.log(result.rows.length + ' rows were received');
 		var new_dict = {}; 
 		for(i in result.rows){
 			new_dict[result.rows[i].id] = result.rows[i];
@@ -178,19 +149,11 @@ function getAllLetters(callback){
 }
 
 function getAllUsers(callback){
-	// connection.query('SELECT * FROM users;', function (error, rows, fields) { 
-	// 	var new_dict = {}; 
-	// 	for(i in rows){
-	// 		new_dict[rows[i].id] = rows[i];
-	// 	}
-	// 	callback(new_dict);
-	// });
 	var query = client.query('SELECT * FROM users', function(err, result) {
 		if(err){
 			console.log("Database query Error: getAllUsers");
 			console.log(err);
 		}
-		console.log(result.rows.length + ' rows were received');
 		var new_dict = {}; 
 		for(i in result.rows){
 			new_dict[result.rows[i].id] = result.rows[i];
@@ -211,27 +174,6 @@ function getCurrentUser(eia, ip_address, callback){
 	*/
 
 	console.log(' + Encrypted : ' + eia)
-	// connection.query('SELECT * FROM users WHERE ip_address = ?',[eia], function (error, results) { 
-	// 	if(results && results.length > 0){
-	// 		callback(results[0]); 
-	// 	}
-	// 	else {
-	// 		// Get Location
-	// 		var location = get_location('api.hostip.info', '/get_json.php?ip=' + ip_address, function(response){
-	// 			var responseLocation = response.city + ", " + response.country_code;
-	// 			var color = generateRandomHexColor();
-	// 			connection.query('INSERT INTO users SET ?', { color: color, ip_address: eia, location: responseLocation }, function(err, result){
-	// 				var query_response = {
-	// 					id : result.insertId,
-	// 					color : color, 
-	// 					location : responseLocation,
-	// 				}
-	// 				callback(query_response);
-	// 			});
-	// 		});
-	// 	}
-	// });
-
 	client.query('SELECT * FROM users WHERE ip_address IN ($1)',[eia], function (err, result) { 
 		if(err){
 			console.log("Database query Error: get getCurrentUser");
@@ -270,9 +212,7 @@ function deleteLetter(letter_id, callback){
 			console.log("Database query Error: get getCurrentUser");
 			console.log(err);
 		}
-		console.log(result);
 		if(result.rowCount > 0){
-			console.log('EMMITING EVENT!!!!');
 			callback(letter_id);
 		}
 	});
