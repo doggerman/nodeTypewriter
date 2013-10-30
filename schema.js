@@ -1,4 +1,7 @@
+console.log(process);
+console.log(process.env);
 console.log(process.env.DATABASE_URL);
+
 
 var pg = require('pg').native
   , connectionString = process.env.DATABASE_URL || "postgres://thejsj_node_test:@localhost/thejsj_node_test"
