@@ -4,9 +4,10 @@ var mysql = require("mysql");
 var pg = require('pg'); 
 var app = require('express')();
 var server = require('http').createServer(app)
-var io = require('socket.io').listen(server, { log: false });
-var crypto = require('crypto');
 var port = process.env.PORT || 8080;
+var io = require('socket.io').listen(port);
+var crypto = require('crypto');
+
 
 // Create the connection. 
 var conString = process.env.HEROKU_POSTGRESQL_YELLOW_URL || "postgres://thejsj_node_test:@localhost/thejsj_node_test";
@@ -35,11 +36,10 @@ app.configure(function(){
 // Heroku won't actually allow us to use WebSockets
 // so we have to setup polling instead.
 // https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
-// io.configure(function () {
-//   io.set("transports", ["xhr-polling"]);
-//   io.set("polling duration", 10);
-// });
-
+io.configure(function () { 
+  io.set("transports", ["xhr-polling"]); 
+  io.set("polling duration", 12); 
+});
 
 /* --------------------
 
