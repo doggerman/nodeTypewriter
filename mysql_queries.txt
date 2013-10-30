@@ -1,11 +1,38 @@
+/* Mysql */
+
 create table letters ( 
-	letter_id INT(11) NOT NULL auto_increment, 
+	id INT(11) NOT NULL auto_increment, 
 	letter VARCHAR(2), 
 	ip_address VARCHAR(255), 
 	created TIMESTAMP, 
 	location VARCHAR(255), 
-	PRIMARY KEY (letter_id) );
+	PRIMARY KEY (id) );
+
+create table users (
+	id INT(11) NOT NULL auto_increment,
+	color varchar(255), 
+	ip_address varchar(255),
+	location varchar(255),
+	PRIMARY KEY (id) );
+)
 
 GRANT ALL privileges 
 ON thejsj_node_test.* 
 	TO thejsj_node_test@'%';
+
+/* Postgres */
+
+create table letters ( 
+	id SERIAL PRIMARY KEY, 
+	letter VARCHAR(2), 
+	ip_address VARCHAR(255), 
+	created timestamp DEFAULT current_timestamp,
+	location VARCHAR(255)
+);
+
+create table users (
+	id SERIAL PRIMARY KEY,
+	color varchar(255), 
+	ip_address varchar(255),
+	location varchar(255)
+);
