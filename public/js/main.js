@@ -20,9 +20,11 @@ $(document).ready(function(){
 	}
 	else {
 		// var host = location.origin.replace(/^http/, '')
-		console.log('Connecting to http://gentle-cliffs-9860.herokuapp.com/');
+		//console.log('Connecting to http://gentle-cliffs-9860.herokuapp.com/');
 		// var socket = io.connect('ws://gentle-cliffs-9860.herokuapp.com/');
-		var socket = io.connect(window.location.hostname);
+		var host = location.origin.replace(/^http/, 'ws')
+		var socket = io.connect(host);
+
 		console.log(socket);
 		// var socket = new io.Socket();
 	}

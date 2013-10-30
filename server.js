@@ -21,17 +21,9 @@ client.connect(function(err) {
 	}
 });
 
-
-if(process.argv[2] == 'local'){
-	server.listen(8080, function() {
-		console.log('Listening on:', port);
-	});
-}
-else {
-	server.listen(port, function() {
-		console.log('Listening on:', port);
-	});
-}
+server.listen(port, function() {
+	console.log('Listening on:', port);
+});
 
 app.use(express.bodyParser());
 
@@ -43,10 +35,10 @@ app.configure(function(){
 // Heroku won't actually allow us to use WebSockets
 // so we have to setup polling instead.
 // https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
-io.configure(function () {
-  io.set("transports", ["xhr-polling"]);
-  io.set("polling duration", 10);
-});
+// io.configure(function () {
+//   io.set("transports", ["xhr-polling"]);
+//   io.set("polling duration", 10);
+// });
 
 
 /* --------------------
@@ -84,7 +76,6 @@ app.get('/', function(req, res){
 -------------------- */
 
 io.sockets.on('connection', function (socket) {
-
 	var ip_address = socket.handshake.address.address;
 	console.log('Socket connection : ' + ip_address);
     var encrypted_ip_address = crypto.createHash('md5').update(ip_address).digest("hex");
