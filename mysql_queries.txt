@@ -22,15 +22,13 @@ ON thejsj_node_test.*
 
 /* Postgres */
 
-create table letters ( 
+create table letters IF NOT EXISTS ( 
 	id SERIAL PRIMARY KEY, 
 	letter VARCHAR(2), 
-	ip_address VARCHAR(255), 
 	created timestamp DEFAULT current_timestamp,
-	location VARCHAR(255)
 );
 
-create table users (
+create table users IF NOT EXISTS (
 	id SERIAL PRIMARY KEY,
 	color varchar(255), 
 	ip_address varchar(255),
@@ -38,5 +36,3 @@ create table users (
 );
 
 ALTER TABLE letters ADD COLUMN vendor_name varchar(25);
-
-- See more at: http://www.w3resource.com/PostgreSQL/postgresql-alter-table.php#sthash.ct3pfh8u.dpuf

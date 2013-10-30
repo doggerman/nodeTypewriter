@@ -6,26 +6,31 @@ var app = require('express')();
 var server = require('http').createServer(app)
 var io = require('socket.io').listen(server, { log: false });
 var crypto = require('crypto');
+var port = process.env.PORT || 8080;
 
 // Create the connection. 
-var conString = "postgres://thejsj_node_test:@localhost/thejsj_node_test";
+var conString = process.env.DATABASE_URL || "postgres://thejsj_node_test:@localhost/thejsj_node_test";
+
 var client = new pg.Client(conString);
 client.connect(function(err) {
-  if(err) {
-    return console.error('could not connect to postgres', err);
-  }
-  else {
-  	console.log('Connection to Postgres succsefully established.');
-  }
+	if(err) {
+		return console.error('could not connect to postgres', err);
+	}
+	else {
+		console.log('Connection to Postgres succsefully established.');
+	}
 });
 
+
 if(process.argv[2] == 'local'){
-	console.log(' Listening to Port: 8080');
-	server.listen(8080);
+	server.listen(8080, function() {
+		console.log('Listening on:', port);
+	});
 }
 else {
-	console.log(' Listening to Port: 80');
-	server.listen(80);
+	server.listen(port, function() {
+		console.log('Listening on:', port);
+	});
 }
 
 app.use(express.bodyParser());
@@ -81,11 +86,12 @@ io.sockets.on('connection', function (socket) {
 		getAllLetters(function(all_letters){
 			socket.emit('getAllLetters', all_letters);
 		});
-		getCurrentUser(eia, ip_address, function(user_array){
-			socket.emit('getUser', user_array);
-		});
 		getAllUsers(function(all_users_array){
 			socket.emit('getAllUsers', all_users_array);
+		});
+		getCurrentUser(eia, ip_address, function(user_array){
+			socket.emit('getUser', user_array);
+			io.sockets.emit('getNewUser', user_array);
 		});
 	});
 
@@ -219,7 +225,7 @@ function deleteLetter(letter_id, callback){
 }
 
 function deleteAllLetters(callback){
-	connection.query('TRUNCATE TABLE letters;', function (error, rows, fields) { 
+	client.query('TRUNCATE TABLE letters;', function (err, result) { 
 		callback(); 
 	});
 }
@@ -255,5 +261,5 @@ function get_location(host, path, this_calback){
 }
 
 function generateRandomHexColor(){
-	return '#'+Math.floor(Math.random()*16777215).toString(16);
+	return '#'+ ('000000' + (Math.random()*0xFFFFFF<<0).toString(16)).slice(-6);
 }

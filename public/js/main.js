@@ -30,22 +30,26 @@ $(document).ready(function(){
 	-------------------- */
 
 	socket.on('getIpAddress', function(encrypted_ip_address){
-		console.log('Got Ip Address : ' + encrypted_ip_address);
 		eia = encrypted_ip_address;
-		console.log(' Emit Init');
 		socket.emit('init', eia);
 	});
 	
 	// On, init Get all Letter from Database
 	socket.on('getAllLetters',function (data) {
-		console.log('getAllLetters');
-		console.log(data);
 		all_letters = data;
 		$('#letters').html('');
 		for(i in all_letters){
-			var html = '<div id="letter-' + all_letters[i].id + '" class="letter user-' + all_letters[i].user + '">' + all_letters[i].letter + '</div>';
+			var html = '<div id="letter-' + all_letters[i].id + '" class="letter user-' + all_letters[i].user_id + '">' + all_letters[i].letter + '</div>';
 			$('#letters').append(html);
 		}
+	});
+
+	// On Get New Letter, Add The Letter
+	socket.on('getNewLetter',function (data) {
+		// Append to our local array
+		all_letters[data.id] = data;
+		// Append to HTML
+		$('#letters').append('<div id="letter-' + data.id + '" class="letter user-' + data.user_id + '">' + data.letter + '</div>');
 	});
 
 	// On Init, get Current User (from IP address)
@@ -54,20 +58,18 @@ $(document).ready(function(){
 	});
 
 	// On Get New Letter, Add The Letter
-	socket.on('getNewLetter',function (data) {
-		console.log('getNewLetter');
-		console.log(data);
-		all_letters[data.id] = data;
-		$('#letters').append('<div id="letter-' + data.id + '" class="letter user-' + data.user + '">' + data.letter + '</div>');
+	socket.on('getAllUsers',function (data) {
+		all_users = data;
+		for(i in all_users){
+			apppendCssClass(all_users[i].id, all_users[i].color);
+		}
 	});
 
 	// On Get New Letter, Add The Letter
-	socket.on('getAllUsers',function (data) {
-		console.log('users');
-		console.log(data);
-		all_users = data;
-		for(i in all_users){
-			apppendCssClass(data[i].id, data[i].color);
+	socket.on('getNewUser',function (data) {
+		if(all_users[data.id] == undefined){
+			all_users[data.id] = data;
+			apppendCssClass(data.id, data.color);
 		}
 	});
 
@@ -83,9 +85,7 @@ $(document).ready(function(){
 	-------------------- */
 
 	window.onkeydown = function(e){
-		console.log(e.keyCode);
 		if(e.keyCode === 8 || e.keyCode === 46) {
-			console.log('DELETE KEY')
 			e.preventDefault();
 			e.stopPropagation();
 			deleteLastUserLetter();
@@ -114,10 +114,6 @@ $(document).ready(function(){
 	}
 
 	function apppendCssClass(id, hex){
-
-		console.log('apppendCssClass');
-		console.log(hex);
-
 		var style = document.createElement('style');
 		style.type = 'text/css';
 		/*
@@ -131,10 +127,7 @@ $(document).ready(function(){
 			// Remove first char
 			hex = hex.substring(1);
 		}
-
 		var rgb = hexToRgb(hex);
-
-		console.log('.user-' + id );
 		style.innerHTML = '.user-' + id + ' { \
 			color: #'+hex+';\
 			background: rgba( ' + rgb.r + ', ' + rgb.g + ', ' + rgb.b + ', 0.2);\
@@ -143,6 +136,7 @@ $(document).ready(function(){
 		}';
 		document.getElementsByTagName('head')[0].appendChild(style);
 	}
+
 	function hexToRgb(hex) {
 		var result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
 		return result ? {
@@ -161,13 +155,9 @@ $(document).ready(function(){
 		for(i in all_letters){ all_keys.push(i); }
 		// Reverse Keys
 		var all_keys_reverse = all_keys.reverse();
-		console.log(all_keys);
-		console.log(all_letters);
 		// Search For Last Key
 		for(var i = 0; i < all_keys_reverse.length; i++){
-			console.log(all_keys_reverse[i]);
 			if(all_letters[all_keys_reverse[i]].user_id == this_user.id){
-				console.log('THIS LETTER: ' + all_letters[all_keys_reverse[i]]);
 				var deleted_letter_id = all_letters[all_keys_reverse[i]].id;
 				break;
 			}
