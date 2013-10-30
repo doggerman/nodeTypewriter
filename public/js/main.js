@@ -19,8 +19,8 @@ $(document).ready(function(){
 		var socket = io.connect('http://localhost:8080');
 	}
 	else {
-		console.log('Connecting to http://162.243.58.104');
-		var socket = io.connect('http://162.243.58.104');
+		console.log('Connecting to http://gentle-cliffs-9860.herokuapp.com/');
+		var socket = io.connect('http://gentle-cliffs-9860.herokuapp.com/');
 	}
 
 	/* --------------------
