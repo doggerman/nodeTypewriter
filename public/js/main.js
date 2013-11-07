@@ -27,7 +27,7 @@ $(document).ready(function(){
 		console.log("host : ");
 		console.log(host);
 		//var socket = io.connect(host);
-		socket = io.connect('ws://thejsj.webfactional.com:27862');
+		socket = io.connect();
 		console.log(" + Socket: ");
 		console.log(socket);
 		// var socket = new io.Socket();
@@ -38,6 +38,18 @@ $(document).ready(function(){
 	Sockets
 
 	-------------------- */
+
+    socket.on('connect', function(){
+    	console.log('connected')
+    });      
+
+    socket.on('disconnect', function (){
+    	console.log('disconnected')
+    });
+
+	socket.on('error', function (reason){
+        console.error('Unable to connect Socket.IO', reason);
+    });
 
 	socket.on('getIpAddress', function(encrypted_ip_address){
 		console.log("EIA : " + eia);
