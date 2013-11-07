@@ -38,7 +38,7 @@ app.configure(function(){
 // so we have to setup polling instead.
 // https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
 io.configure(function () {
-	iso.set("polling duration", 10);
+	io.set("polling duration", 10);
     io.enable('browser client minification');
     io.enable('browser client etag');
     io.enable('browser client gzip');
