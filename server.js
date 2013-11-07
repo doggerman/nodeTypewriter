@@ -16,9 +16,10 @@ var port = 27862;
 server.listen(port, function() {
 	console.log('Listening on:', port);
 });
+var io = require('socket.io').listen(server, { log: false });
 console.log("io : ");
 console.log(io);
-var io = require('socket.io').listen(server, { log: false });
+
 var crypto = require('crypto');
 
 // Create the connection. 

@@ -12,19 +12,23 @@ Styling...
 
 $(document).ready(function(){
 
-	var this_user, all_users, eia, all_letters;
+	var this_user, all_users, eia, all_letters, socket;
 
 	if(document.domain == 'localhost'){
 		console.log('Connecting to localhost');
-		var socket = io.connect('http://localhost:8080');
+		socket = io.connect('http://localhost:8080');
 	}
 	else {
 		// var host = location.origin.replace(/^http/, '')
 		//console.log('Connecting to http://gentle-cliffs-9860.herokuapp.com/');
 		// var socket = io.connect('ws://gentle-cliffs-9860.herokuapp.com/');
-		var host = location.origin.replace(/^http/, 'ws')
-		var socket = io.connect(host);
-
+		console.log(location.origin);
+		var host = location.origin.replace(/^http/, 'ws');
+		console.log("host : ");
+		console.log(host);
+		//var socket = io.connect(host);
+		socket = io.connect();
+		console.log(" + Socket: ");
 		console.log(socket);
 		// var socket = new io.Socket();
 	}
