@@ -1,3 +1,5 @@
+console.log(" INIT APP!!!! ");
+
 var config = require('./config');
 var express = require('express');
 var http = require('http');
