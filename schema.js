@@ -1,9 +1,10 @@
 var pg = require('pg').native
-  , connectionString = process.env.HEROKU_POSTGRESQL_YELLOW_URL || "postgres://thejsj_node_test:@localhost/thejsj_node_test"
+  , config = require('./config')
+  , conString = config.getConnectionString()
   , client
   , query;
 
-client = new pg.Client(connectionString);
+client = new pg.Client(conString);
 client.connect();
 
 var insert_letters_table = 'create table IF NOT EXISTS letters ( id SERIAL PRIMARY KEY, letter VARCHAR(2), created timestamp DEFAULT current_timestamp );';

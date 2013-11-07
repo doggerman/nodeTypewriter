@@ -22,17 +22,8 @@ ON thejsj_node_test.*
 
 /* Postgres */
 
-create table letters IF NOT EXISTS ( 
-	id SERIAL PRIMARY KEY, 
-	letter VARCHAR(2), 
-	created timestamp DEFAULT current_timestamp,
-);
+create table letters IF NOT EXISTS ( id SERIAL PRIMARY KEY, letter VARCHAR(2), created timestamp DEFAULT current_timestamp );
 
-create table users IF NOT EXISTS (
-	id SERIAL PRIMARY KEY,
-	color varchar(255), 
-	ip_address varchar(255),
-	location varchar(255)
-);
+create table users IF NOT EXISTS ( id SERIAL PRIMARY KEY, color varchar(255), ip_address varchar(255), location varchar(255));
 
 ALTER TABLE letters ADD COLUMN vendor_name varchar(25);

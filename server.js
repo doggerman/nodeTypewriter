@@ -1,6 +1,7 @@
+var config = require('./config');
 var express = require('express');
 var http = require('http');
-var mysql = require("mysql"); 
+// var mysql = require("mysql"); 
 var pg = require('pg'); 
 var app = require('express')();
 var server = require('http').createServer(app);
@@ -10,7 +11,7 @@ var crypto = require('crypto');
 
 
 // Create the connection. 
-var conString = process.env.HEROKU_POSTGRESQL_YELLOW_URL || "postgres://thejsj_node_test:@localhost/thejsj_node_test";
+var conString = config.getConnectionString();
 
 var client = new pg.Client(conString);
 client.connect(function(err) {
