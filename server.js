@@ -4,20 +4,26 @@ var http = require('http');
 // var mysql = require("mysql"); 
 var pg = require('pg'); 
 var app = require('express')();
+console.log("App : ");
+console.log(app);
 var server = require('http').createServer(app);
-
+console.log("server : ");
+console.log(server);
 var port = 27862;
 
 server.listen(port, function() {
 	console.log('Listening on:', port);
 });
-
+console.log("io : ");
+console.log(io);
 var io = require('socket.io').listen(server, { log: false });
 var crypto = require('crypto');
 
-
 // Create the connection. 
 var conString = config.getConnectionString();
+
+console.log("conString : ");
+console.log(conString);
 
 var client = new pg.Client(conString);
 client.connect(function(err) {
