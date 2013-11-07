@@ -5,7 +5,7 @@ var http = require('http');
 var pg = require('pg'); 
 var app = require('express')();
 var server = require('http').createServer(app);
-var port = process.env.PORT || 8080;
+var port = 27862;
 var io = require('socket.io').listen(server, { log: false });
 var crypto = require('crypto');
 
@@ -15,7 +15,7 @@ var conString = config.getConnectionString();
 
 var client = new pg.Client(conString);
 client.connect(function(err) {
-	if(err) {w
+	if(err) {
 		return console.error('could not connect to postgres', err);
 	}
 	else {
@@ -38,12 +38,12 @@ app.configure(function(){
 // so we have to setup polling instead.
 // https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
 io.configure(function () {
-	io.set("polling duration", 10);
-	io.enable('browser client minification');
-	io.enable('browser client etag');
-	io.enable('browser client gzip');
-	io.set('log level', 3);
-	io.set('transports', ['websocket']);
+	iso.set("polling duration", 10);
+    io.enable('browser client minification');
+    io.enable('browser client etag');
+    io.enable('browser client gzip');
+    io.set('log level', 3);
+    io.set('transports', ['websocket']);
 });
 
 
