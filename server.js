@@ -11,8 +11,8 @@ var server  = require('http').createServer(app);
 server.listen(port, function() {
 	console.log('Listening on:', port);
 });
+var io = require('socket.io').listen(server);
 var crypto = require('crypto');
-
 // Create the connection. 
 var conString = config.getConnectionString();
 
