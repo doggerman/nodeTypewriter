@@ -27,7 +27,7 @@ $(document).ready(function(){
 		console.log("host : ");
 		console.log(host);
 		//var socket = io.connect(host);
-		socket = io.connect();
+		socket = io.connect('http://thejsj.webfactional.com:27862', {secure:false);
 		console.log(" + Socket: ");
 		console.log(socket);
 		// var socket = new io.Socket();
