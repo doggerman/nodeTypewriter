@@ -5,18 +5,19 @@ var express = require('express');
 var http = require('http');
 // var mysql = require("mysql"); 
 var pg = require('pg'); 
-var app = require('express')();
-console.log("App : ");
-console.log(app);
-var server = require('http').createServer(app);
-console.log("server : ");
-console.log(server);
+// var app = require('express')();
+// console.log("App : ");
+// console.log(app);
+// var server = require('http').createServer(app);
+// console.log("server : ");
+// console.log(server);
 var port = 27862;
+var server = express.createServer();
+server.listen(port);
+var io = require('socket.io').listen(server);
 
-server.listen(port, function() {
-	console.log('Listening on:', port);
-});
-var io = require('socket.io').listen(port, { log: false });
+
+var io = require('socket.io').listen(server, { log: false });
 console.log("io : ");
 console.log(io);
 
