@@ -2,10 +2,13 @@
     "name": "nodetypewriter",
     "version": "0.0.1",
     "dependencies": {
-        "crypto": "0.0.3",
         "express": "3.4.3",
-        "mysql": "2.0.0-alpha9",
+        "pg": "2.8.2",
         "socket.io": "0.9.16"
+    },
+    "repository" :  { 
+        "type" : "git"
+        , "url" : "https://github.com/thejsj/nodeTypewriter.git"
     },
     "engines": {
         "node": "0.10.21",
