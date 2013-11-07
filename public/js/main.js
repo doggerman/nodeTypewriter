@@ -40,6 +40,7 @@ $(document).ready(function(){
 	-------------------- */
 
 	socket.on('getIpAddress', function(encrypted_ip_address){
+		console.log("EIA : " + eia);
 		eia = encrypted_ip_address;
 		socket.emit('init', eia);
 	});

@@ -16,7 +16,7 @@ var port = 27862;
 server.listen(port, function() {
 	console.log('Listening on:', port);
 });
-var io = require('socket.io').listen(server, { log: false });
+var io = require('socket.io').listen(port, { log: false });
 console.log("io : ");
 console.log(io);
 
