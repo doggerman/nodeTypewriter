@@ -103,10 +103,11 @@ app.post('/api/insert/', function(req, res){
 });
 
 // Debug Mode
-app.get('/api/debug_mode/', function(req, res){
+app.get('/api/debug/', function(req, res){
 	console.log("Trying to get Debug : " + debug);
+	//res.send('Hello World');
 	res.writeHead(200, { 'Content-Type': 'application/json'});
-	res.send({ debug: debug });
+	res.end(JSON.stringify({debug : debug}));
 });
 
 app.get('/', function(req, res){
