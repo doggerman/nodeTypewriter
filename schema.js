@@ -13,7 +13,8 @@ var insert_letters_table = [
 	'letter VARCHAR(2), ',
 	'user_id INTEGER, ',
 	'created TIMESTAMP DEFAULT current_timestamp ',
-	'');
+	');'
+]
 insert_letters_table = insert_letters_table.join();
 
 var insert_users_table = [
