@@ -22,12 +22,12 @@ $(document).ready(function(){
 		// var host = location.origin.replace(/^http/, '')
 		//console.log('Connecting to http://gentle-cliffs-9860.herokuapp.com/');
 		// var socket = io.connect('ws://gentle-cliffs-9860.herokuapp.com/');
-		console.log(location.origin);
-		var host = location.origin.replace(/^http/, 'ws');
-		console.log("host : ");
-		console.log(host);
+		// console.log(location.origin);
+		// var host = location.origin.replace(/^http/, 'ws');
+		// console.log("host : ");
+		// console.log(host);
 		//var socket = io.connect(host);
-		socket = io.connect();
+		socket = new io.Socket('thejsj.webfactional.com', { 'port': 27862 });
 		console.log(" + Socket: ");
 		console.log(socket);
 		// var socket = new io.Socket();
