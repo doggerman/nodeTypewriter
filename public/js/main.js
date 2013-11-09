@@ -99,7 +99,9 @@ $(document).ready(function(){
 
 	// On Get New Letter, Add The Letter
 	socket.on('getAllUsers',function (data) {
+		console.log('getAllUers');
 		all_users = data;
+		console.log(all_users);
 		for(i in all_users){
 			apppendCssClass(all_users[i].id, all_users[i].color);
 		}
@@ -107,8 +109,10 @@ $(document).ready(function(){
 
 	// On Get New Letter, Add The Letter
 	socket.on('getNewUser',function (data) {
+		console.log('Get new Users');
 		if(all_users[data.id] == undefined){
 			all_users[data.id] = data;
+			console.log(all_users[data.id]);
 			apppendCssClass(data.id, data.color);
 		}
 	});
@@ -162,7 +166,8 @@ $(document).ready(function(){
 		text-shadow: 0px 0px 2px rgba(0, 128, 0, 0.5);
 		color: green;
 		*/
-
+		console.log(id);
+		console.log(hex);
 		if(hex.length == 7){
 			// Remove first char
 			hex = hex.substring(1);

@@ -276,12 +276,6 @@ function getCurrentUser(eia, ip_address, callback){
 	});
 }
 
-function getAllUsers(callback){
-	client.query('SELECT * FROM users;', function (err, result) { 
-		callback(result); 
-	});
-}
-
 function deleteLetter(letter_id, callback){
 	client.query('DELETE FROM letters where id = $1;',[letter_id], function (err, result) { 
 		if(err){
