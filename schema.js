@@ -3,9 +3,22 @@ var pg = require('pg').native
   , conString = config.getConnectionString()
   , client
   , query;
+  
+console.log('Libraries Imported');
 
 client = new pg.Client(conString);
-client.connect();
+client.connect(function(err) {
+	if(err) {
+		return console.error('could not connect to postgres', err);
+	}
+	console.log('Connection to Postgres succsefully established.');
+});
+
+/* --------------------
+
+	Queries
+
+-------------------- */
 
 var insert_letters_table = [
 	'create table IF NOT EXISTS letters ( ',
@@ -28,6 +41,12 @@ var insert_users_table = [
 insert_users_table = insert_users_table.join();
 
 var drop_tables = 'DROP TABLE IF EXISTS users, letters CASCADE;'
+
+/* --------------------
+
+	Execute queries
+
+-------------------- */
 
 if(process.argv[2] == 'create'){
 	client.query(insert_letters_table, function(err, result) {
