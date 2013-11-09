@@ -59,7 +59,7 @@ $(document).ready(function(){
         console.log('Socket Message : ' + msg);
     });
 
-    socket.addEvent('close', function () {
+    socket.on('close', function () {
 	    console.log('Socket Close');
 	});
 

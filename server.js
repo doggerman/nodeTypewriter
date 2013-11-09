@@ -24,9 +24,7 @@ client.connect(function(err) {
 	if(err) {
 		return console.error('could not connect to postgres', err);
 	}
-	else {
-		console.log('Connection to Postgres succsefully established.');
-	}
+	console.log('Connection to Postgres succsefully established.');
 });
 
 app.use(express.bodyParser());
@@ -36,16 +34,19 @@ app.configure(function(){
   app.use(express.static(__dirname + '/public'));
 });
 
-// Heroku won't actually allow us to use WebSockets
-// so we have to setup polling instead.
-// https://devcenter.heroku.com/articles/using-socket-io-with-node-js-on-heroku
 io.configure(function () {
 	io.set("polling duration", 10);
     io.enable('browser client minification');
     io.enable('browser client etag');
     io.enable('browser client gzip');
-    io.set('log level', 3);
-    io.set('transports', ['websocket']);
+    io.set('log level', 4);
+    io.set('transports', [
+		'websocket'
+		, 'flashsocket'
+		, 'htmlfile'
+		, 'xhr-polling'
+		, 'jsonp-polling'
+	]);
 });
 
 
