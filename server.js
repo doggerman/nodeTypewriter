@@ -85,6 +85,10 @@ app.get('/', function(req, res){
 -------------------- */
 
 io.sockets.on('connection', function (socket) {
+	console.log(" ** New Connection ** ");
+	var session = socket.handshake.session;
+    console.log(session);
+
 	var ip_address = socket.handshake.address.address;
 	console.log('Socket connection : ' + ip_address);
     var encrypted_ip_address = crypto.createHash('md5').update(ip_address).digest("hex");
@@ -129,6 +133,8 @@ io.sockets.on('connection', function (socket) {
 -------------------- */
 
 function insertLetter(data, callback){
+	console.log("Insert Letter");
+	console.log(data);
 	var letter_query = {
 		letter: data.letter, 
 		user: data.user,
