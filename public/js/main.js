@@ -26,8 +26,12 @@ $(document).ready(function(){
 		// var host = location.origin.replace(/^http/, 'ws');
 		// console.log("host : ");
 		// console.log(host);
-		//var socket = io.connect(host);
-		socket = new io.Socket();
+		io.setPath('./Socket.IO/');
+		console.log("Initiaging Socket");
+		socket = io.connect(host, { 'port': 27862 });
+		console.log("Connecting to Socket");
+		socket.connect();
+		//socket = new io.Socket('thejsj.webfactional.com', { 'port': 27862 });
 		console.log(" + Socket: ");
 		console.log(socket);
 		// var socket = new io.Socket();
@@ -40,16 +44,24 @@ $(document).ready(function(){
 	-------------------- */
 
     socket.on('connect', function(){
-    	console.log('connected')
+    	console.log(' ++ Socket Connected')
     });      
 
     socket.on('disconnect', function (){
-    	console.log('disconnected')
+    	console.log(' ++ Socket Disconnected')
     });
 
 	socket.on('error', function (reason){
-        console.error('Error: Unable to connect to socket', reason);
+        console.error('Socket Error: Unable to connect to socket', reason);
     });
+
+    socket.on('message', function (msg) {
+        console.log('Socket Message : ' + msg);
+    });
+
+    socket.addEvent('close', function () {
+	    console.log('Socket Close');
+	});
 
 	socket.on('getIpAddress', function(encrypted_ip_address){
 		console.log("EIA : " + eia);
