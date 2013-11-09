@@ -73,6 +73,10 @@ $(document).ready(function(){
 		$('#connecting-modal').fadeOut(250);
 		socket.emit('init', eia);
 	});
+
+	socket.on('getIpAddressRaw', function(ip_address){
+		console.log("Your IP Address is : " + ip_address);
+	});
 	
 	// On, init Get all Letter from Database
 	socket.on('getAllLetters',function (data) {
