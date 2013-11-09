@@ -108,7 +108,9 @@ app.get('/', function(req, res){
 
 // Debug Mode
 app.get('/api/debug/', function(req, res){
-	res.json({ debug: debug });
+	res.writeHead(200, { 'Content-Type': 'application/json' });
+	res.write(JSON.stringify({ debug: debug }));
+	res.end();
 });
 
 /* --------------------
