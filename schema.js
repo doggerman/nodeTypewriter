@@ -56,6 +56,7 @@ if(process.argv[2] == 'create'){
 			if(err){ console.log(err); }
 			console.log("Done");
 			client.end();
+			process.exit(code=0);
 		});
 	});
 }
@@ -63,6 +64,8 @@ else if(process.argv[2] == 'drop'){
 	client.query(drop_tables, function(err, result) {
 		if(err){ console.log(err); }
 		console.log('Tables Dropped : users + letters');
+		client.end();
+		process.exit(code=0);
 	});
 }
 else {
