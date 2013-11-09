@@ -102,15 +102,18 @@ app.post('/api/insert/', function(req, res){
 	res.send('This feautre is unavailable');
 });
 
+// Debug Mode
+app.get('/api/debug_mode/', function(req, res){
+	console.log("Trying to get Debug : " + debug);
+	res.writeHead(200, { 'Content-Type': 'application/json'});
+	res.send({ debug: debug });
+});
+
 app.get('/', function(req, res){
 	res.sendfile('public/index.html');
 });
 
-// Debug Mode
-app.get('/api/debug_mode/', function(req, res){
-	res.writeHead(200, { 'Content-Type': 'application/json'});
-    res.end({ debug: debug });
-});
+
 
 /* --------------------
 
