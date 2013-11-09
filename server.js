@@ -19,6 +19,7 @@ if(process.argv[3] == 'local'){ var local_port = 8080; }
 console.log("  - Imports");
 var port    = local_port || 27862;
 var debug   = t_debug || false;
+var logLvl  = (function(){ if(debug){ return 4; } else { return 1; }})();
 var config  = require('./config');
 var express = require('express');
 var http    = require('http');
@@ -62,7 +63,7 @@ io.configure(function () {
     io.enable('browser client minification');
     io.enable('browser client etag');
     io.enable('browser client gzip');
-    io.set('log level', 4);
+    io.set('log level', logLvl);
     io.set('transports', [
 		'websocket'
 		, 'flashsocket'

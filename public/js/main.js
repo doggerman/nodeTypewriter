@@ -18,22 +18,23 @@ $(document).ready(function(){
 	debug = false;
 	// Check the node server to see if we're in debug mode
 	$.post( "api/debug/", function( data ) {
-		console.log(data);
-		console.log(debug);
 		debug = data.debug;
-		console.log(debug);
+		if(debug){
+			console.log("DEBUG : " + debug);
+		}
 	});
 
 	if(document.domain == 'localhost'){
-		console.log('Connecting to localhost');
+		if(debug){ console.log('Connecting to localhost'); }
 		socket = io.connect('http://localhost:8080');
 	}
 	else {
-		console.log("Initiaging Socket");
 		socket = io.connect();
-		console.log("Connecting to Socket");
-		console.log(" + Socket: ");
-		console.log(socket);
+		if(debug){
+			console.log("Connecting to Socket");
+			console.log(" + Socket: ");
+			console.log(socket);
+		}
 	}
 
 	/* --------------------
@@ -43,28 +44,30 @@ $(document).ready(function(){
 	-------------------- */
 
     socket.on('connect', function(){
-    	console.log(' ++ Socket Connected')
+    	if(debug){console.log(' ++ Socket Connected');}
     });      
 
     socket.on('disconnect', function (){
-    	console.log(' ++ Socket Disconnected')
+    	if(debug){ console.log(' ++ Socket Disconnected');}
     });
 
 	socket.on('error', function (reason){
-        console.error('Socket Error: Unable to connect to socket', reason);
+		if(debug){console.error('Socket Error: Unable to connect to socket', reason);}
     });
 
     socket.on('message', function (msg) {
-        console.log('Socket Message : ' + msg);
+    	if(debug){console.log('Socket Message : ' + msg);}
     });
 
     socket.on('close', function () {
-	    console.log('Socket Close');
+    	if(debug){console.log('Socket Close');}
 	});
 
 	socket.on('getIpAddress', function(encrypted_ip_address){
-		console.log("EIA : " + eia);
 		eia = encrypted_ip_address;
+		if(debug){ console.log("EIA : " + encrypted_ip_address); }
+		// To $ or not to $. That is the question.
+		$('#connecting-modal').fadeOut(250);
 		socket.emit('init', eia);
 	});
 	
