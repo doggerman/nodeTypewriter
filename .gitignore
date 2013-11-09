@@ -4,3 +4,4 @@
 *.sql
 *.sqlite
 config.js
+*.sh
