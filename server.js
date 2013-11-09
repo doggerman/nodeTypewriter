@@ -25,9 +25,11 @@ var express = require('express');
 var http    = require('http');
 var pg      = require('pg'); 
 var app     = require('express')();
-var server  = require('http').createServer(app).listen(port, function() {
+var server  = require('http').createServer(app)
+server.listen(port, function() {
+	console.log("session_debug MODE: " + session_debug );
 	if(session_debug){ console.log('Listening on:', port); }
-	});
+});
 var io = require('socket.io').listen(server,{ log: true });
 var crypto = require('crypto');
 var conString = config.getConnectionString();
@@ -51,6 +53,7 @@ client.connect(function(err) {
 	if(err) {
 		return console.error('could not connect to postgres', err);
 	}
+	console.log("session_debug MODE: " + session_debug );
 	if(session_debug){ console.log('Connection to Postgres succsefully established.'); }
 });
 
@@ -68,6 +71,7 @@ app.configure(function(){
 console.log('Configure Io');
 
 io.configure(function () {
+	console.log("io config session_debug MODE: " + session_debug );
 	io.set("polling duration", 10);
     io.enable('browser client minification');
     io.enable('browser client etag');
@@ -118,6 +122,7 @@ app.get('/api/debug/', function(req, res){
 });
 
 app.get('/', function(req, res){
+	console.log("send file session_debug MODE: " + session_debug );
 	res.sendfile('public/index.html');
 });
 
@@ -133,6 +138,7 @@ console.log('Configure Sockets');
 
 io.sockets.on('connection', function (socket) {
 	var session = socket.handshake.session;
+	console.log('hello')
 	console.log("session_debug MODE: " + session_debug );
 	if(session_debug){
 		console.log(" ** New Connection ** ");
