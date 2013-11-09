@@ -1,9 +1,9 @@
-var pg = require('pg').native
+var pg = require('pg')
   , config = require('./config')
   , conString = config.getConnectionString()
   , client
   , query;
-  
+
 console.log('Libraries Imported');
 
 client = new pg.Client(conString);
