@@ -68,7 +68,7 @@ $(document).ready(function(){
 
 	socket.on('getIpAddress', function(encrypted_ip_address){
 		eia = encrypted_ip_address;
-		if(debug){ console.log("EIA : " + encrypted_ip_address); }
+		console.log("EIA : " + encrypted_ip_address);
 		// To $ or not to $. That is the question.
 		$('#connecting-modal').fadeOut(250);
 		socket.emit('init', eia);

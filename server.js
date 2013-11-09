@@ -7,7 +7,7 @@ console.log(" Initiate Application");
 -------------------- */
 
 console.log("  - Set Process Arguments");
-if(process.argv[2] == 'debug'){ var t_debug = true; }
+if(process.argv[2] == 'debug'){ var t_session_debug = true; }
 if(process.argv[3] == 'local'){ var local_port = 8080; }
 
 /* --------------------
@@ -18,15 +18,15 @@ if(process.argv[3] == 'local'){ var local_port = 8080; }
 
 console.log("  - Imports");
 var port    = local_port || 27862;
-var debug   = t_debug || false;
-var logLvl  = (function(){ if(debug){ return 4; } else { return 1; }})();
+var session_debug   = t_session_debug || false;
+var logLvl  = (function(){ if(session_debug){ return 4; } else { return 1; }})();
 var config  = require('./config');
 var express = require('express');
 var http    = require('http');
 var pg      = require('pg'); 
 var app     = require('express')();
 var server  = require('http').createServer(app).listen(port, function() {
-	if(debug){ console.log('Listening on:', port); }
+	if(session_debug){ console.log('Listening on:', port); }
 	});
 var io = require('socket.io').listen(server);
 var crypto = require('crypto');
@@ -38,11 +38,11 @@ var conString = config.getConnectionString();
 
 -------------------- */
 
-console.log("DEBUG MODE: " + debug );
+console.log("session_debug MODE: " + session_debug );
 console.log("LOG LEVEL : " + logLvl );
 console.log(process.argv);
 
-if(debug){
+if(session_debug){
 	console.log("conString : ");
 	console.log(conString);
 }
@@ -52,7 +52,7 @@ client.connect(function(err) {
 	if(err) {
 		return console.error('could not connect to postgres', err);
 	}
-	if(debug){ console.log('Connection to Postgres succsefully established.'); }
+	if(session_debug){ console.log('Connection to Postgres succsefully established.'); }
 });
 
 app.use(express.bodyParser());
@@ -102,12 +102,12 @@ app.post('/api/insert/', function(req, res){
 	res.send('This feautre is unavailable');
 });
 
-// Debug Mode
+// session_debug Mode
 app.get('/api/debug/', function(req, res){
-	console.log("Trying to get Debug : " + debug);
+	console.log("Trying to get session_debug : " + session_debug);
 	//res.send('Hello World');
 	res.writeHead(200, { 'Content-Type': 'application/json'});
-	res.end(JSON.stringify({debug : debug}));
+	res.end(JSON.stringify({session_debug : session_debug}));
 });
 
 app.get('/', function(req, res){
@@ -124,7 +124,7 @@ app.get('/', function(req, res){
 
 io.sockets.on('connection', function (socket) {
 	var session = socket.handshake.session;
-	if(debug){
+	if(session_debug){
 		console.log(" ** New Connection ** ");
 		console.log(session);
 		console.log(' ----- START Handshake ----- ');
@@ -133,9 +133,9 @@ io.sockets.on('connection', function (socket) {
 	}
 
 	var ip_address = socket.handshake.address.address;
-	if(debug){ console.log('Socket connection : ' + ip_address); }
+	if(session_debug){ console.log('Socket connection : ' + ip_address); }
     var encrypted_ip_address = crypto.createHash('md5').update(ip_address).digest("hex");
-   	if(debug){ console.log('Encrypted Ip Address : ' + encrypted_ip_address); }
+   	if(session_debug){ console.log('Encrypted Ip Address : ' + encrypted_ip_address); }
     socket.emit('getIpAddress', encrypted_ip_address);
 
 	socket.on('init',function(eia){
@@ -236,7 +236,7 @@ function getCurrentUser(eia, ip_address, callback){
 	| location   | varchar(255) | YES  |     | NULL    |      
 	*/
 
-	if(debug){ console.log(' + Encrypted : ' + eia); }
+	if(session_debug){ console.log(' + Encrypted : ' + eia); }
 	client.query('SELECT * FROM users WHERE ip_address IN ($1)',[eia], function (err, result) { 
 		if(err){
 			console.log("Database query Error: get getCurrentUser");
