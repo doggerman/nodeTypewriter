@@ -75,8 +75,7 @@ $(document).ready(function(){
 	});
 
 	socket.on('getIpRaw', function(ip_address){
-		console.log("Your IP Address is : ");
-		console.log(ip_address);
+		console.log("Your IP Address is : " + ip_address);
 	});
 	
 	// On, init Get all Letter from Database

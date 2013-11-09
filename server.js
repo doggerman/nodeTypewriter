@@ -144,10 +144,10 @@ io.sockets.on('connection', function (socket) {
 	console.log('Socket connection : ' + ip_address);
     var encrypted_ip_address = crypto.createHash('md5').update(ip_address).digest("hex");
    	if(session_debug){ console.log('Encrypted Ip Address : ' + encrypted_ip_address); }
-
     
     socket.emit('getIpAddress', encrypted_ip_address);
-    socket.emit('getIpRaw', [ip_address, socket.handshake.address.address]);
+    socket.emit('getIpRaw', ip_address);
+    socket.emit('getIpRaw', encrypted_ip_address);
 
 	socket.on('init',function(eia){
 		console.log('Init Connection : ' + eia);
