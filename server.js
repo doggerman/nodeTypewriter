@@ -88,10 +88,14 @@ io.sockets.on('connection', function (socket) {
 	console.log(" ** New Connection ** ");
 	var session = socket.handshake.session;
     console.log(session);
+    console.log(' ----- START Handshake ----- ');
+    console.log(socket.handshake);
+    console.log(' ----- END Handshake ----- ');
 
 	var ip_address = socket.handshake.address.address;
 	console.log('Socket connection : ' + ip_address);
     var encrypted_ip_address = crypto.createHash('md5').update(ip_address).digest("hex");
+    console.log('Encrypted Ip Address : ' + encrypted_ip_address);
     socket.emit('getIpAddress', encrypted_ip_address);
 
 	socket.on('init',function(eia){
