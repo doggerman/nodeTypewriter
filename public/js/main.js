@@ -22,6 +22,9 @@ $(document).ready(function(){
 		if(debug){
 			console.log("DEBUG : " + debug);
 		}
+		else {
+			console.log('Welcome to My App!'); // So it looks Pretty!
+		}
 	});
 
 	if(document.domain == 'localhost'){
