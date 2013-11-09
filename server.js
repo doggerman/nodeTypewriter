@@ -6,7 +6,6 @@ console.log(" Initiate Application");
 
 -------------------- */
 
-console.log("  - Set Process Arguments");
 if(process.argv[2] == 'debug'){ var t_session_debug = true; }
 if(process.argv[3] == 'local'){ var local_port = 8080; }
 
@@ -16,7 +15,6 @@ if(process.argv[3] == 'local'){ var local_port = 8080; }
 
 -------------------- */
 
-console.log("  - Imports");
 var port    = local_port || 27862;
 var session_debug   = t_session_debug || false;
 var logLvl  = (function(){ if(session_debug){ return 4; } else { return 1; }})();
@@ -27,7 +25,6 @@ var pg      = require('pg');
 var app     = require('express')();
 var server  = require('http').createServer(app)
 server.listen(port, function() {
-	console.log("session_debug MODE: " + session_debug );
 	if(session_debug){ console.log('Listening on:', port); }
 });
 var io = require('socket.io').listen(server,{ log: true });
@@ -40,8 +37,8 @@ var conString = config.getConnectionString();
 
 -------------------- */
 
-console.log("session_debug MODE: " + session_debug );
-console.log("LOG LEVEL : " + logLvl );
+console.log("session_debug : " + session_debug );
+console.log("LOG LEVEL     : " + logLvl );
 
 if(session_debug){
 	console.log("conString : ");
@@ -57,18 +54,12 @@ client.connect(function(err) {
 	if(session_debug){ console.log('Connection to Postgres succsefully established.'); }
 });
 
-console.log('Body Parser');
-
 app.use(express.bodyParser());
-
-console.log('Configure Express');
 
 app.configure(function(){
   app.use('/media', express.static(__dirname + '/media'));
   app.use(express.static(__dirname + '/public'));
 });
-
-console.log('Configure Io');
 
 io.configure(function () {
 	console.log("io config session_debug MODE: " + session_debug );
@@ -93,8 +84,6 @@ io.configure(function () {
 
 -------------------- */
 
-console.log('Set Routers');
-
 // Get Letters
 app.get('/api/letters/', function(req, res){
 	res.send('This feautre is unavailable');
@@ -108,6 +97,15 @@ app.get('/api/delete_all/', function(req, res){
 	});
 });
 
+// Get User
+app.get('/api/users/', function(req, res){
+	getAllUsers(function(data){
+		// Parse into a json
+		res.writeHead(200, { 'Content-Type': 'application/json'});
+		res.end(JSON.stringify(data));
+	});
+});
+
 // Insert Letter
 app.post('/api/insert/', function(req, res){
 	res.send('This feautre is unavailable');
@@ -116,13 +114,11 @@ app.post('/api/insert/', function(req, res){
 // session_debug Mode
 // Doesn't Work on Webfaction
 app.get('/api/debug/', function(req, res){
-	console.log("Trying to get session_debug : " + session_debug);
 	res.writeHead(200, { 'Content-Type': 'application/json'});
 	res.end(JSON.stringify({session_debug : session_debug}));
 });
 
 app.get('/', function(req, res){
-	console.log("send file session_debug MODE: " + session_debug );
 	res.sendfile('public/index.html');
 });
 
@@ -134,12 +130,8 @@ app.get('/', function(req, res){
 
 -------------------- */
 
-console.log('Configure Sockets');
-
 io.sockets.on('connection', function (socket) {
 	var session = socket.handshake.session;
-	console.log('hello')
-	console.log("session_debug MODE: " + session_debug );
 	if(session_debug){
 		console.log(" ** New Connection ** ");
 		console.log(session);
@@ -191,8 +183,6 @@ io.sockets.on('connection', function (socket) {
 	MySql Functions
 
 -------------------- */
-
-console.log('Configure queries');
 
 function insertLetter(data, callback){
 	var letter_query = {
@@ -283,6 +273,12 @@ function getCurrentUser(eia, ip_address, callback){
 				});
 			});
 		}
+	});
+}
+
+function getAllUsers(callback){
+	client.query('SELECT * FROM users;', function (err, result) { 
+		callback(result); 
 	});
 }
 
