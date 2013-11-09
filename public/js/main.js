@@ -27,7 +27,7 @@ $(document).ready(function(){
 		// console.log("host : ");
 		// console.log(host);
 		//var socket = io.connect(host);
-		socket = new io.Socket('thejsj.webfactional.com', { 'port': 27862 });
+		socket = new io.Socket();
 		console.log(" + Socket: ");
 		console.log(socket);
 		// var socket = new io.Socket();
