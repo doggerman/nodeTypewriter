@@ -26,7 +26,7 @@ $(document).ready(function(){
 		// var host = location.origin.replace(/^http/, 'ws');
 		// console.log("host : ");
 		// console.log(host);
-		io.setPath('./Socket.IO/');
+
 		console.log("Initiaging Socket");
 		socket = io.connect(host, { 'port': 27862 });
 		console.log("Connecting to Socket");
