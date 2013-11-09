@@ -28,7 +28,7 @@ var app     = require('express')();
 var server  = require('http').createServer(app).listen(port, function() {
 	if(session_debug){ console.log('Listening on:', port); }
 	});
-var io = require('socket.io').listen(server);
+var io = require('socket.io').listen(server,{ log: true });
 var crypto = require('crypto');
 var conString = config.getConnectionString();
 
@@ -54,12 +54,18 @@ client.connect(function(err) {
 	if(session_debug){ console.log('Connection to Postgres succsefully established.'); }
 });
 
+console.log('Body Parser');
+
 app.use(express.bodyParser());
+
+console.log('Configure Express');
 
 app.configure(function(){
   app.use('/media', express.static(__dirname + '/media'));
   app.use(express.static(__dirname + '/public'));
 });
+
+console.log('Configure Io');
 
 io.configure(function () {
 	io.set("polling duration", 10);
@@ -82,6 +88,8 @@ io.configure(function () {
 	Router
 
 -------------------- */
+
+console.log('Set Routers');
 
 // Get Letters
 app.get('/api/letters/', function(req, res){
@@ -121,6 +129,8 @@ app.get('/', function(req, res){
 
 -------------------- */
 
+console.log('Configure Sockets');
+
 io.sockets.on('connection', function (socket) {
 	var session = socket.handshake.session;
 	console.log("session_debug MODE: " + session_debug );
@@ -132,7 +142,7 @@ io.sockets.on('connection', function (socket) {
 		console.log(' ----- END Handshake ----- ');
 	}
 
-	var ip_address = socket.handshake.address.address;
+	var ip_address = generateIP(socket.handshake.address.address);
 	console.log('Socket connection : ' + ip_address);
     var encrypted_ip_address = crypto.createHash('md5').update(ip_address).digest("hex");
    	if(session_debug){ console.log('Encrypted Ip Address : ' + encrypted_ip_address); }
@@ -175,6 +185,8 @@ io.sockets.on('connection', function (socket) {
 	MySql Functions
 
 -------------------- */
+
+console.log('Configure queries');
 
 function insertLetter(data, callback){
 	var letter_query = {
@@ -314,4 +326,11 @@ function get_location(host, path, this_calback){
 
 function generateRandomHexColor(){
 	return '#'+ ('000000' + (Math.random()*0xFFFFFF<<0).toString(16)).slice(-6);
+}
+
+function generateIP(ip_address){
+	if(ip_address == '127.0.0.1'){
+		return 'rip' +  Math.random();
+	}
+	return ip_address;
 }
