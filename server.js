@@ -107,7 +107,7 @@ app.get('/', function(req, res){
 });
 
 // Debug Mode
-app.post('/api/debug/', function(req, res){
+app.get('/api/debug/', function(req, res){
 	res.json({ debug: debug });
 });
 

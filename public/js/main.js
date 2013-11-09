@@ -17,7 +17,7 @@ $(document).ready(function(){
 	// Debug Mode
 	debug = false;
 	// Check the node server to see if we're in debug mode
-	$.post( "api/debug/", function( data ) {
+	$.get( "api/debug/", function( data ) {
 		debug = data.debug;
 		if(debug){
 			console.log("DEBUG : " + debug);
