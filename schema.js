@@ -59,7 +59,7 @@ if(process.argv[2] == 'create'){
 		});
 	});
 }
-else if(process.argv[2] == 'create'){
+else if(process.argv[2] == 'drop'){
 	client.query(drop_tables, function(err, result) {
 		if(err){ console.log(err); }
 		console.log('Tables Dropped : users + letters');
