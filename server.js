@@ -7,7 +7,7 @@ console.log(" Initiate Application");
 -------------------- */
 
 console.log("  - Set Process Arguments");
-if(process.argv[2] == 'debug'){ var t_debug = true; }
+if(process.argv[2] == 'debug'){ var t_debug = true; console.log("DEBUG MODE: ON"); else { console.log("DEBUG MODE: OFF"); } }
 if(process.argv[3] == 'local'){ var local_port = 8080; }
 
 /* --------------------
