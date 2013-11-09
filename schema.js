@@ -49,6 +49,8 @@ var drop_tables = 'DROP TABLE IF EXISTS users, letters CASCADE;'
 -------------------- */
 
 if(process.argv[2] == 'create'){
+	console.log(insert_letters_table);
+	console.log(insert_users_table);
 	client.query(insert_letters_table, function(err, result) {
 		if(err){ console.log(err); }
 		console.log('Create first Table Done');
