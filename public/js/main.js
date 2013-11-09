@@ -12,34 +12,33 @@ Styling...
 
 $(document).ready(function(){
 
-	var this_user, all_users, eia, all_letters, socket;
+	var this_user, all_users, eia, all_letters, socket, debug;
+
+	// Debug Mode
+	debug = false;
+	// Check the node server to see if we're in debug mode
+	$.post( "api/debug/", function( data ) {
+		console.log(data);
+		console.log(debug);
+		debug = data.debug;
+		console.log(debug);
+	});
 
 	if(document.domain == 'localhost'){
 		console.log('Connecting to localhost');
 		socket = io.connect('http://localhost:8080');
 	}
 	else {
-		// var host = location.origin.replace(/^http/, '')
-		//console.log('Connecting to http://gentle-cliffs-9860.herokuapp.com/');
-		// var socket = io.connect('ws://gentle-cliffs-9860.herokuapp.com/');
-		// console.log(location.origin);
-		// var host = location.origin.replace(/^http/, 'ws');
-		// console.log("host : ");
-		// console.log(host);
-
 		console.log("Initiaging Socket");
 		socket = io.connect();
 		console.log("Connecting to Socket");
-		//socket.connect();
-		//socket = new io.Socket('thejsj.webfactional.com', { 'port': 27862 });
 		console.log(" + Socket: ");
 		console.log(socket);
-		// var socket = new io.Socket();
 	}
 
 	/* --------------------
 
-	Sockets
+		Sockets
 
 	-------------------- */
 
@@ -109,9 +108,7 @@ $(document).ready(function(){
 	});
 
 	socket.on('getDeletedLetter', function(letter_id){
-		delete all_letters[letter_id];
 		$("#letter-" + letter_id).remove();
-		console.log($("#letter-" + letter_id));
 		delete all_letters[letter_id];
 	});
 

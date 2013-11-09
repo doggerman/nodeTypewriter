@@ -1,30 +1,53 @@
-console.log(" INIT APP!!!! ");
+console.log(" Initiate Application");
 
-var port    = 27862;
+/* --------------------
+
+	Process Variables
+
+-------------------- */
+
+console.log("  - Set Process Arguments");
+if(process.argv[2] == 'debug'){ var t_debug = true; }
+if(process.argv[3] == 'local'){ var local_port = 8080; }
+
+/* --------------------
+
+	Imports
+
+-------------------- */
+
+console.log("  - Imports");
+var port    = local_port || 27862;
+var debug   = t_debug || false;
 var config  = require('./config');
 var express = require('express');
 var http    = require('http');
-// var mysql = require("mysql"); 
 var pg      = require('pg'); 
 var app     = require('express')();
-var server  = require('http').createServer(app);
-server.listen(port, function() {
-	console.log('Listening on:', port);
-});
+var server  = require('http').createServer(app).listen(port, function() {
+	if(debug){ console.log('Listening on:', port); }
+	});
 var io = require('socket.io').listen(server);
 var crypto = require('crypto');
-// Create the connection. 
 var conString = config.getConnectionString();
 
-console.log("conString : ");
-console.log(conString);
+/* --------------------
+
+	Connections And Configurations
+
+-------------------- */
+
+if(debug){
+	console.log("conString : ");
+	console.log(conString);
+}
 
 var client = new pg.Client(conString);
 client.connect(function(err) {
 	if(err) {
 		return console.error('could not connect to postgres', err);
 	}
-	console.log('Connection to Postgres succsefully established.');
+	if(debug){ console.log('Connection to Postgres succsefully established.'); }
 });
 
 app.use(express.bodyParser());
@@ -78,6 +101,11 @@ app.get('/', function(req, res){
 	res.sendfile('public/index.html');
 });
 
+// Debug Mode
+app.post('/api/debug/', function(req, res){
+	res.json({ debug: debug });
+});
+
 /* --------------------
 
 	Sockets
@@ -85,21 +113,23 @@ app.get('/', function(req, res){
 -------------------- */
 
 io.sockets.on('connection', function (socket) {
-	console.log(" ** New Connection ** ");
 	var session = socket.handshake.session;
-    console.log(session);
-    console.log(' ----- START Handshake ----- ');
-    console.log(socket.handshake);
-    console.log(' ----- END Handshake ----- ');
+	if(debug){
+		console.log(" ** New Connection ** ");
+		console.log(session);
+		console.log(' ----- START Handshake ----- ');
+		console.log(socket.handshake);
+		console.log(' ----- END Handshake ----- ');
+	}
 
 	var ip_address = socket.handshake.address.address;
-	console.log('Socket connection : ' + ip_address);
+	if(debug){ console.log('Socket connection : ' + ip_address); }
     var encrypted_ip_address = crypto.createHash('md5').update(ip_address).digest("hex");
-    console.log('Encrypted Ip Address : ' + encrypted_ip_address);
+   	if(debug){ console.log('Encrypted Ip Address : ' + encrypted_ip_address); }
     socket.emit('getIpAddress', encrypted_ip_address);
 
 	socket.on('init',function(eia){
-		console.log('init : ' + eia);
+		console.log('Init Connection : ' + eia);
 		getAllLetters(function(all_letters){
 			socket.emit('getAllLetters', all_letters);
 		});
@@ -137,8 +167,6 @@ io.sockets.on('connection', function (socket) {
 -------------------- */
 
 function insertLetter(data, callback){
-	console.log("Insert Letter");
-	console.log(data);
 	var letter_query = {
 		letter: data.letter, 
 		user: data.user,
@@ -198,7 +226,7 @@ function getCurrentUser(eia, ip_address, callback){
 	| location   | varchar(255) | YES  |     | NULL    |      
 	*/
 
-	console.log(' + Encrypted : ' + eia)
+	if(debug){ console.log(' + Encrypted : ' + eia); }
 	client.query('SELECT * FROM users WHERE ip_address IN ($1)',[eia], function (err, result) { 
 		if(err){
 			console.log("Database query Error: get getCurrentUser");
@@ -231,7 +259,6 @@ function getCurrentUser(eia, ip_address, callback){
 }
 
 function deleteLetter(letter_id, callback){
-	console.log('query the db: ' + letter_id)
 	client.query('DELETE FROM letters where id = $1;',[letter_id], function (err, result) { 
 		if(err){
 			console.log("Database query Error: get getCurrentUser");
@@ -261,21 +288,17 @@ function get_location(host, path, this_calback){
 		host: host,
 		path: path,
 	};
-
 	callback = function(response) {
 		var str = '';
-
 		//another chunk of data has been recieved, so append it to `str`
 		response.on('data', function (chunk) {
 			str += chunk;
 		});
-
 		//the whole response has been recieved, so we just print it out here
 		response.on('end', function () {
 			this_calback(str);
 		});
 	}
-
 	http.request(options, callback).end();
 }
 
