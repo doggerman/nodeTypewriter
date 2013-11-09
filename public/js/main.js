@@ -48,7 +48,7 @@ $(document).ready(function(){
     });
 
 	socket.on('error', function (reason){
-        console.error('Unable to connect Socket.IO', reason);
+        console.error('Error: Unable to connect to socket', reason);
     });
 
 	socket.on('getIpAddress', function(encrypted_ip_address){
