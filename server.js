@@ -39,6 +39,7 @@ var conString = config.getConnectionString();
 -------------------- */
 
 console.log("DEBUG MODE: " + debug );
+console.log("LOG LEVEL : " + logLvl );
 console.log(process.argv);
 
 if(debug){
