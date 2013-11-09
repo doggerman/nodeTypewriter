@@ -40,7 +40,6 @@ var conString = config.getConnectionString();
 
 console.log("session_debug MODE: " + session_debug );
 console.log("LOG LEVEL : " + logLvl );
-console.log(process.argv);
 
 if(session_debug){
 	console.log("conString : ");
@@ -103,9 +102,9 @@ app.post('/api/insert/', function(req, res){
 });
 
 // session_debug Mode
+// Doesn't Work on Webfaction
 app.get('/api/debug/', function(req, res){
 	console.log("Trying to get session_debug : " + session_debug);
-	//res.send('Hello World');
 	res.writeHead(200, { 'Content-Type': 'application/json'});
 	res.end(JSON.stringify({session_debug : session_debug}));
 });
@@ -124,6 +123,7 @@ app.get('/', function(req, res){
 
 io.sockets.on('connection', function (socket) {
 	var session = socket.handshake.session;
+	console.log("session_debug MODE: " + session_debug );
 	if(session_debug){
 		console.log(" ** New Connection ** ");
 		console.log(session);
@@ -133,7 +133,7 @@ io.sockets.on('connection', function (socket) {
 	}
 
 	var ip_address = socket.handshake.address.address;
-	if(session_debug){ console.log('Socket connection : ' + ip_address); }
+	console.log('Socket connection : ' + ip_address);
     var encrypted_ip_address = crypto.createHash('md5').update(ip_address).digest("hex");
    	if(session_debug){ console.log('Encrypted Ip Address : ' + encrypted_ip_address); }
     socket.emit('getIpAddress', encrypted_ip_address);
