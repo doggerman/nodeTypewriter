@@ -66,7 +66,7 @@ io.configure(function () {
     io.enable('browser client minification');
     io.enable('browser client etag');
     io.enable('browser client gzip');
-    io.set('log level', logLvl);
+    io.set('log level', 4);
     io.set('transports', [
 		'websocket'
 		, 'flashsocket'
