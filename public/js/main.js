@@ -28,7 +28,7 @@ $(document).ready(function(){
 		// console.log(host);
 
 		console.log("Initiaging Socket");
-		socket = io.connect(location.origin, { 'port': 27862 });
+		socket = new io.Socket(location.origin, { 'port': 27862 });
 		console.log("Connecting to Socket");
 		socket.connect();
 		//socket = new io.Socket('thejsj.webfactional.com', { 'port': 27862 });
