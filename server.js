@@ -107,10 +107,9 @@ app.get('/', function(req, res){
 });
 
 // Debug Mode
-app.get('/api/debug/', function(req, res){
-	res.writeHead(200, { 'Content-Type': 'application/json' });
-	res.write(JSON.stringify({ debug: debug }));
-	res.end();
+app.get('/api/debug_mode/', function(req, res){
+	res.writeHead(200, { 'Content-Type': 'application/json'});
+    res.end({ debug: debug });
 });
 
 /* --------------------
