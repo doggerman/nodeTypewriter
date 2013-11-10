@@ -1,3 +1,17 @@
+/* --------------------
+
+	Stuff to fix:
+
+	console.log is not working
+	log level is not working for Socket IO
+
+	IP address is always the same
+	generateIP() not working...
+
+	API calls not working on webfaction
+
+-------------------- */
+
 console.log(" Initiate Application");
 
 /* --------------------
@@ -124,7 +138,7 @@ app.get('/', function(req, res){
 	res.sendfile('public/index.html');
 });
 
-app.use(function(req, res){
+app.get('*', function(req, res){
 	res.send('404. Your Request could not be read.');
 });
 
