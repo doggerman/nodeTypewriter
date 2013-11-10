@@ -101,8 +101,9 @@ app.get('/api/delete_all/', function(req, res){
 app.get('/api/users/', function(req, res){
 	getAllUsers(function(data){
 		// Parse into a json
-		res.writeHead(200, { 'Content-Type': 'application/json'});
-		res.end(JSON.stringify(data));
+		// res.writeHead(200, { 'Content-Type': 'application/json'});
+		// res.end(JSON.stringify(data));
+		res.send(JSON.stringify(data));
 	});
 });
 
@@ -114,8 +115,9 @@ app.post('/api/insert/', function(req, res){
 // session_debug Mode
 // Doesn't Work on Webfaction
 app.get('/api/debug/', function(req, res){
-	res.writeHead(200, { 'Content-Type': 'application/json'});
-	res.end(JSON.stringify({session_debug : session_debug}));
+	res.send(JSON.stringify({session_debug : session_debug}));
+	// res.writeHead(200, { 'Content-Type': 'application/json'});
+	// res.end(JSON.stringify({session_debug : session_debug}));
 });
 
 app.get('/', function(req, res){
