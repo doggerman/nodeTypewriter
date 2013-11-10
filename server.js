@@ -108,7 +108,7 @@ app.get('/api/users/', function(req, res){
 });
 
 // Insert Letter
-app.post('/api/insert/', function(req, res){
+app.get('/api/insert/', function(req, res){
 	res.send('This feautre is unavailable');
 });
 
@@ -122,6 +122,10 @@ app.get('/api/debug/', function(req, res){
 
 app.get('/', function(req, res){
 	res.sendfile('public/index.html');
+});
+
+app.use(function(req, res){
+	res.send('404. Your Request could not be read.');
 });
 
 
