@@ -146,8 +146,14 @@ io.sockets.on('connection', function (socket) {
    	if(session_debug){ console.log('Encrypted Ip Address : ' + encrypted_ip_address); }
     
     socket.emit('getIpAddress', encrypted_ip_address);
-    socket.emit('getIpRaw', ip_address);
-    socket.emit('getIpRaw', encrypted_ip_address);
+    socket.send(ip_address);
+    socket.send(encrypted_ip_address);
+    setTimeout(function(){
+    	socket.emit('getIpRaw', ip_address);
+    }, 100);
+    setTimeout(function(){
+    	socket.emit('getIpRaw', encrypted_ip_address);
+    }, 100);
 
 	socket.on('init',function(eia){
 		console.log('Init Connection : ' + eia);

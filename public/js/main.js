@@ -66,16 +66,16 @@ $(document).ready(function(){
     	if(debug){console.log('Socket Close');}
 	});
 
+	socket.on('getIpRaw', function(ip_address){
+		console.log("Your IP Address is : " + ip_address);
+	});
+
 	socket.on('getIpAddress', function(encrypted_ip_address){
 		eia = encrypted_ip_address;
 		console.log("EIA : " + encrypted_ip_address);
 		// To $ or not to $. That is the question.
 		$('#connecting-modal').fadeOut(250);
 		socket.emit('init', eia);
-	});
-
-	socket.on('getIpRaw', function(ip_address){
-		console.log("Your IP Address is : " + ip_address);
 	});
 	
 	// On, init Get all Letter from Database
