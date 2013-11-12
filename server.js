@@ -354,7 +354,7 @@ function generateRandomHexColor(){
 }
 
 function generateIP(ip_address){
-	if(ip_address == '127.0.0.1'){
+	if(ip_address == '127.0.0.1' || ip_address == '75.126.113.168' || ip_address == '75.126.175.56'){
 		return 'rip' +  Math.random();
 	}
 	return ip_address;
